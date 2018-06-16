@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.equitybot.trade</groupId>
   <artifactId>equitybot-algoritham-svc</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>0.0.1</version>
   
   <properties>
 		<java.version>1.8</java.version>
