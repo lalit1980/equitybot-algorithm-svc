@@ -42,7 +42,7 @@ public class TimeSeriesReceiverListener {
     }
 
     private void processRequest(String seriesName) throws IOException {
-    	test.runStartegy(seriesName, 5);
+    	test.runStartegy(seriesName);
     }
 
 }
