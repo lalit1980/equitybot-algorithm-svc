@@ -64,7 +64,7 @@ SUPERTREND = IF(Current Close <= Current FINAL UPPERBAND ) THEN Current FINAL UP
 	        	Decimal low=atr.getTimeSeries().getBar(i).getMinPrice();
 	        	Decimal basicUpperBand=((high.plus(low)).dividedBy(2)).plus(atr.getValue(i).multipliedBy(3));
 	        	Decimal basicLowerBand=((high.plus(low)).dividedBy(2)).minus(atr.getValue(i).multipliedBy(3));
-	        	logger.info("High: "+high+"Low: "+low+" Basic Upper Band: "+ basicUpperBand+" Basic Upper Band: "+basicUpperBand);
+	        	logger.info("Sl No: "+i+" ATR"+atr.getValue(i)+"High: "+high+"Low: "+low+" Basic Lower Band: "+ basicLowerBand+" Basic Upper Band: "+basicUpperBand);
 	        	/*if()
 	        	Decimal finalUpperBand=null;
 	        	Decimal finalLowerBand=null;
