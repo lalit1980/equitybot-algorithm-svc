@@ -1,8 +1,5 @@
 package com.equitybot.trade.algorithm.sample;
 
-import java.util.LinkedList;
-import java.util.List;
-
 import org.apache.ignite.Ignite;
 import org.apache.ignite.IgniteCache;
 import org.apache.ignite.Ignition;
@@ -16,11 +13,11 @@ import org.apache.ignite.spi.discovery.tcp.ipfinder.kubernetes.TcpDiscoveryKuber
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import org.ta4j.core.Decimal;
-import org.ta4j.core.TimeSeries;
-import org.ta4j.core.indicators.ATRIndicator;
+import org.ta4j.core.*;
+import org.ta4j.core.indicators.SMAIndicator;
 import org.ta4j.core.indicators.helpers.ClosePriceIndicator;
-import com.equitybot.trade.algorithm.bo.SuperTrendBO;
+import org.ta4j.core.trading.rules.OverIndicatorRule;
+import org.ta4j.core.trading.rules.UnderIndicatorRule;
 
 @Service
 public class Test {
@@ -28,8 +25,6 @@ public class Test {
 	/** Close price of the last bar */
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	IgniteCache<String, TimeSeries> cache;
-
-	private List<SuperTrendBO> superTrendList = null;
 
 	public Test() {
 		IgniteConfiguration cfg = new IgniteConfiguration();
@@ -49,7 +44,45 @@ public class Test {
 		ccfg.setRebalanceMode(CacheRebalanceMode.NONE);
 		ccfg.setDataRegionName("1GB_Region");
 		this.cache = ignite.getOrCreateCache(ccfg);
-		superTrendList = new LinkedList<SuperTrendBO>();
+	}
+
+	/**
+	 * Builds a moving time series (i.e. keeping only the maxBarCount last bars)
+	 * 
+	 * @param maxBarCount
+	 *            the number of bars to keep in the time series (at maximum)
+	 * @return a moving time series
+	 */
+	private TimeSeries initMovingTimeSeries(int maxBarCount, String seriesName) {
+		TimeSeries series = cache.get(seriesName);
+		if (series != null) {
+			logger.info(seriesName+ " Initial bar count: " + series.getBarCount());
+			// Limitating the number of bars to maxBarCount
+			series.setMaximumBarCount(maxBarCount);
+			return series;
+		} else {
+			return null;
+		}
+
+	}
+
+	/**
+	 * @param series
+	 *            a time series
+	 * @return a dummy strategy
+	 */
+	private static Strategy buildStrategy(TimeSeries series) {
+		if (series == null) {
+			throw new IllegalArgumentException("Series cannot be null");
+		}
+
+		ClosePriceIndicator closePrice = new ClosePriceIndicator(series);
+		SMAIndicator sma = new SMAIndicator(closePrice, 12);
+
+		// Signals
+		// Buy when SMA goes over close price
+		// Sell when close price goes over SMA
+		return new BaseStrategy(new OverIndicatorRule(sma, closePrice), new UnderIndicatorRule(sma, closePrice));
 	}
 
 	public IgniteCache<String, TimeSeries> getCache() {
@@ -57,46 +90,41 @@ public class Test {
 	}
 
 	public void runStartegy(String seriesName) {
-		TimeSeries series = cache.get(seriesName);
-
-		/*
-		
-		 BASIC UPPERBAND = (HIGH + LOW) / 2 + Multiplier * ATR 
-		 BASIC LOWERBAND = (HIGH+ LOW) / 2 - Multiplier * ATR
-		 
-		FINAL UPPERBAND = IF( (Current BASICUPPERBAND < Previous FINAL UPPERBAND) and
-		 (Previous Close > Previous FINAL UPPERBAND)) THEN (Current BASIC UPPERBAND)
-		 ELSE Previous FINALUPPERBAND)
-		 
-		 FINAL LOWERBAND = IF( (Current BASIC LOWERBAND > Previous FINAL LOWERBAND)
-		 and (Previous Close < Previous FINAL LOWERBAND)) THEN (Current BASIC
-		  LOWERBAND) ELSE Previous FINAL LOWERBAND)
-		 
-		 SUPERTREND = IF(Current Close <= Current FINAL UPPERBAND ) THEN Current FINAL
-		  UPPERBAND ELSE Current FINAL LOWERBAND
-		 */
+		TimeSeries series = initMovingTimeSeries(5, seriesName);
 
 		if (series != null) {
-			ATRIndicator atr = new ATRIndicator(series, 10);
-			final int nbBars = series.getBarCount();
-			Decimal previousUpperBand = Decimal.valueOf(0.0);
-			Decimal previousLowerBand = Decimal.valueOf(0.0);
-			SuperTrendBO trend = new SuperTrendBO();
-			for (int i = 0; i < nbBars; i++) {
-				Decimal high = atr.getTimeSeries().getBar(i).getMaxPrice();
-				Decimal low = atr.getTimeSeries().getBar(i).getMinPrice();
-			
-				Decimal currentBasicUpperBand = ((high.plus(low)).dividedBy(2)).plus(atr.getValue(i).multipliedBy(3));
-				Decimal currentBasicLowerBand = ((high.plus(low)).dividedBy(2)).minus(atr.getValue(i).multipliedBy(3));
-				
-				
-				
-				logger.info("Sl No: " + i + " ATR %2f" + atr.getValue(i) + " High: %2f" + high + " Low: " + low
-						+ " Basic Lower Band: " + currentBasicLowerBand + " Basic Upper Band: " + currentBasicUpperBand);
+			// Building the trading strategy
+			Strategy strategy = buildStrategy(series);
 
+			// Initializing the trading history
+			TradingRecord tradingRecord = new BaseTradingRecord();
+			logger.info("************************************************************");
+			if (series != null && series.getBarCount() > 0) {
+
+				int endIndex = series.getEndIndex();
+				for (int i = 0; i < endIndex; i++) {
+					Bar newBar = series.getBar(i);
+					if (strategy.shouldEnter(endIndex)) {
+						// Our strategy should enter
+						logger.info(seriesName+" NameStrategy should ENTER on " + endIndex);
+						boolean entered = tradingRecord.enter(endIndex, newBar.getClosePrice(), Decimal.TEN);
+						if (entered) {
+							Order entry = tradingRecord.getLastEntry();
+							logger.info(seriesName+" Entered on " + entry.getIndex() + " (price=" + entry.getPrice().doubleValue()
+									+ ", amount=" + entry.getAmount().doubleValue() + ")");
+						}
+					} else if (strategy.shouldExit(endIndex)) {
+						// Our strategy should exit
+						logger.info("Strategy should EXIT on " + endIndex);
+						boolean exited = tradingRecord.exit(endIndex, newBar.getClosePrice(), Decimal.TEN);
+						if (exited) {
+							Order exit = tradingRecord.getLastExit();
+							logger.info(seriesName+" Exited on " + exit.getIndex() + " (price=" + exit.getPrice().doubleValue()
+									+ ", amount=" + exit.getAmount().doubleValue() + ")");
+						}
+					}
+				}
 			}
 		}
-
 	}
-
 }
