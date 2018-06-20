@@ -1,0 +1,10 @@
+
+.project
+.settings/org.eclipse.core.resources.prefs
+target/classes/application-dev.yml
+target/classes/application-kubernetes.yml
+target/classes/application.yml
+target/classes/logback.xml
+target/classes/META-INF/MANIFEST.MF
+target/classes/META-INF/maven/com.equitybot.trade/equitybot-algoritham-svc/pom.properties
+target/classes/META-INF/maven/com.equitybot.trade/equitybot-algoritham-svc/pom.xml
