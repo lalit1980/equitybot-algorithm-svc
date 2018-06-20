@@ -2,11 +2,12 @@ package com.equitybot.trade.algorithm.sample;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 import org.ta4j.core.TimeSeries;
 
 import java.util.LinkedList;
 import java.util.List;
-
+@Service
 public class SuperTrendBuySell {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -26,9 +27,9 @@ public class SuperTrendBuySell {
         for (int index = superTrend.getRange(); index < superTrend.getSuperTrendList().size();
              index++) {
             if (timeSeries.getBarData().get(index).getClosePrice().isLessThan(superTrend.getSuperTrendList().get(index))) {
-                superTrendBuySell = "BUY";
+                superTrendBuySell = Constant.BUY;
             } else {
-                superTrendBuySell = "SELL";
+                superTrendBuySell = Constant.SELL;
             }
             this.SuperTrendBuySellList.add(superTrendBuySell);
             logger.info(superTrendBuySell);
@@ -40,9 +41,9 @@ public class SuperTrendBuySell {
         String superTrendBuySell;
         if (timeSeries.getBarData().get(timeSeries.getBarData().size() - 1).getClosePrice()
                 .isLessThan(superTrend.getSuperTrendList().get(timeSeries.getBarData().size() - 1))) {
-            superTrendBuySell = "BUY";
+            superTrendBuySell = Constant.BUY;
         } else {
-            superTrendBuySell = "SELL";
+            superTrendBuySell = Constant.SELL;
         }
         this.SuperTrendBuySellList.add(superTrendBuySell);
         logger.info(superTrendBuySell);

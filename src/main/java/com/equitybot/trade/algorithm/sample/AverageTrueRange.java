@@ -2,11 +2,12 @@ package com.equitybot.trade.algorithm.sample;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 import org.ta4j.core.Decimal;
 
 import java.util.LinkedList;
 import java.util.List;
-
+@Service
 public class AverageTrueRange {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -43,15 +44,17 @@ public class AverageTrueRange {
         }
     }
 
-    public void addNewAverageTrueRange(List<Decimal>trueRangeList){
+    public void addNewAverageTrueRange(TrueRange trueRange){
         logger.info(" * adding new Average True Range  ");
         Decimal atr  = Decimal.valueOf(0);
-        for (int index = trueRangeList.size()-this.range; index <= index; index++) {
-            atr = atr.plus(trueRangeList.get(index));
-        }
-        atr = atr.dividedBy(range);
-        averageTrueRangeList.add(atr);
-        logger.info(atr.toString());
+            for (int index2 = trueRange.getTrueRangeList().size()-range ;
+                 index2 <= trueRange.getTrueRangeList().size()-1; index2++) {
+                atr = atr.plus(trueRange.getTrueRangeList().get(index2));
+            }
+            atr = atr.dividedBy(range);
+            averageTrueRangeList.add(atr);
+            logger.info(atr.toString());
+
     }
 
 	public List<Decimal> getAverageTrueRangeList() {

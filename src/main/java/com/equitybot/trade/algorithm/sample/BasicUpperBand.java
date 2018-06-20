@@ -2,13 +2,14 @@ package com.equitybot.trade.algorithm.sample;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 import org.ta4j.core.Bar;
 import org.ta4j.core.Decimal;
 import org.ta4j.core.TimeSeries;
 
 import java.util.LinkedList;
 import java.util.List;
-
+@Service
 public class BasicUpperBand {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());

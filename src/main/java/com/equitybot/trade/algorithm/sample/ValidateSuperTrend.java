@@ -1,5 +1,7 @@
 package com.equitybot.trade.algorithm.sample;
 
+
+import org.springframework.stereotype.Service;
 import org.ta4j.core.Bar;
 import org.ta4j.core.BaseBar;
 import org.ta4j.core.BaseTimeSeries;
@@ -10,7 +12,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Calendar;
 import java.util.Date;
-
+@Service
 public class ValidateSuperTrend {
 
     private TimeSeries timeSeries;
@@ -23,7 +25,6 @@ public class ValidateSuperTrend {
         String line = "";
         String cvsSplitBy = ",";
         this.timeSeries = new BaseTimeSeries();
-
         Bar bar;
         try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
             while ((line = br.readLine()) != null) {
@@ -79,7 +80,7 @@ public class ValidateSuperTrend {
     private void writeInCSVFile(TrueRange trueRange, AverageTrueRange averageTrueRange, BasicLowerBand basicLowerBand,
                                 BasicUpperBand basicUpperBand, FinalLowerBand finalLowerBand, FinalUpperBand finalUpperBand,
                                 SuperTrend superTrend, SuperTrendBuySell superTrendBuySell) throws IOException {
-        File outputFile = new File("/Users/lalitsingh/Downloads/output.csv");
+        File outputFile = new File("/data/logsoutput.csv");
         if (!outputFile.exists()) {
             outputFile.createNewFile();
         }
@@ -110,8 +111,14 @@ public class ValidateSuperTrend {
 
     public ZonedDateTime getEndTime(Date date) {
         return ZonedDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
+    }
 
+    public TimeSeries getTimeSeries() {
+        return timeSeries;
+    }
 
+    public static Calendar getCustomCalendar() {
+        return customCalendar;
     }
 
 }
