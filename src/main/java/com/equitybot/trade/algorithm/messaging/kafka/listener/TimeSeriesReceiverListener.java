@@ -10,18 +10,17 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.annotation.TopicPartition;
 
-import com.equitybot.trade.algorithm.sample.Test;
+import com.equitybot.trade.algorithm.strategy.SuperTrendAnalyzer;
+import com.equitybot.trade.algorithm.strategy.TradingBotOnMovingTimeSeries;
 
 
 public class TimeSeriesReceiverListener {
-
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
-    
-    @Autowired
-    private Test test;
     
     @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapServers;
+    @Autowired
+    TradingBotOnMovingTimeSeries tradeBot;
 
     @KafkaListener(id = "id0", topicPartitions = {@TopicPartition(topic = "notify-algo-seriesupdate-topic", partitions = {"0"})})
     public void listenPartition0(ConsumerRecord<?, ?> record) throws IOException {
@@ -42,7 +41,11 @@ public class TimeSeriesReceiverListener {
     }
 
     private void processRequest(String seriesName) throws IOException {
-    	test.runStartegy(seriesName);
+    	try {
+			tradeBot.startBot(seriesName);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
     }
 
 }

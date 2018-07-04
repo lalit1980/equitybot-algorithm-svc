@@ -1,4 +1,4 @@
-package com.equitybot.trade.algorithm.bo;
+package com.equitybot.trade.algorithm.mongodb.domain;
 
 import org.ta4j.core.Decimal;
 

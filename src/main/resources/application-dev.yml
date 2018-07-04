@@ -33,9 +33,13 @@ spring:
       host: localhost
       port: 27017
       database: hc4
-      
+    cassandra: 
+      keyspace-name: equitybot_trade_keyspace
+      contact-points: localhost
+      port: 9042
+      cassandra.basepackages: com.equitybot.trade.db.cassandra.tick.domain 
 server:
-  address: 0.0.0.0
+  address: 127.0.0.1
   port: 9012
 
 tick:
@@ -43,3 +47,8 @@ tick:
     Serializer: /Users/lalitsingh/data/TestData
   barsize: 60
   maxserializetick: 1024
+supertrend:
+  bandSize: 3
+  smaSize: 7
+  csvPath: /Users/lalitsingh/data/csv/
+  maxBarCount: 20
