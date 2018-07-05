@@ -8,6 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
+import org.apache.ignite.IgniteCache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.ta4j.core.Bar;
@@ -40,7 +41,7 @@ public class SuperTrendAnalyzer {
     private ActionLogDataRepository actionRepo;
     
     private static boolean isDBClen = false;
-  
+   
 
     public SuperTrendAnalyzer(int bandSize, int smaSize, long instrument, LogDataRepository repo, ActionLogDataRepository actionRepo) {
         this.bandSize = bandSize;
@@ -93,13 +94,6 @@ public class SuperTrendAnalyzer {
         if (this.previousBar != null) {
             workingTrueRange = calculateTrueRange(this.previousBar, workingBar);
             this.initTrueRangeList.add(workingTrueRange);
-        }else {
-        	if(!isDBClen) {
-        	 repo.deleteAll();
-             actionRepo.deleteAll();
-        	isDBClen = true;
-        }
-        	
         }
         if (this.initTrueRangeList.size() == this.smaSize) {
             workingSMA = calculateSMA(this.initTrueRangeList);
@@ -251,4 +245,5 @@ public class SuperTrendAnalyzer {
     public long getInstrument() {
         return instrument;
     }
+
 }
