@@ -13,9 +13,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.ta4j.core.TimeSeries;
 
-import com.equitybot.trade.algorithm.bo.LogData;
 import com.equitybot.trade.algorithm.mongodb.repository.ActionLogDataRepository;
 import com.equitybot.trade.algorithm.mongodb.repository.LogDataRepository;
+
 @Service
 public class ValidateSuperTrend {
 
@@ -28,18 +28,18 @@ public class ValidateSuperTrend {
     @Value("${supertrend.csvPath}")
     private String csvPath;
     @Autowired
-    private LogDataRepository repo;
-    @Autowired
-    private ActionLogDataRepository actionRepo;
+	private AlgorithmDataLoger algorithmDataLoger;
+    
+    
     public ValidateSuperTrend() {
         this.superTrendAnalyzerMap = new HashMap<>();
     }
 
-    public void evaluate(TimeSeries timeSeries,IgniteCache<String, LogData> orderBookCache) throws IOException {
+    public void evaluate(TimeSeries timeSeries,IgniteCache<Long, Double> totalProfitCache) throws IOException {
         if (timeSeries != null && timeSeries.getBarData().size() > 0) {
             SuperTrendAnalyzer superTrendAnalyzer = this.superTrendAnalyzerMap.get(Long.parseLong(timeSeries.getName()));
             if (superTrendAnalyzer == null) {
-                superTrendAnalyzer = getSuperTrendAnalyzer(Long.parseLong(timeSeries.getName()));
+                superTrendAnalyzer = getSuperTrendAnalyzer(Long.parseLong(timeSeries.getName()),totalProfitCache);
                 this.superTrendAnalyzerMap.put(Long.parseLong(timeSeries.getName()), superTrendAnalyzer);
             }
             superTrendAnalyzer.analysis(timeSeries.getBarData().get(timeSeries.getBarData().size() - 1));
@@ -49,10 +49,10 @@ public class ValidateSuperTrend {
         }
     }
 
-    private SuperTrendAnalyzer getSuperTrendAnalyzer(final Long instrument) throws IOException {
+    private SuperTrendAnalyzer getSuperTrendAnalyzer(final Long instrument,IgniteCache<Long, Double> totalProfitCache) throws IOException {
        
-        return new SuperTrendAnalyzer(this.bandSize, this.smaSize, instrument, this.repo, this.actionRepo);
-    }
+        return new SuperTrendAnalyzer(this.bandSize, this.smaSize, instrument, algorithmDataLoger);
+        }
 
 
     

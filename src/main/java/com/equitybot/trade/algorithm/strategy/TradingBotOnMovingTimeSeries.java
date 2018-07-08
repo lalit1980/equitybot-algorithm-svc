@@ -20,7 +20,7 @@ import com.equitybot.trade.algorithm.bo.LogData;
 public class TradingBotOnMovingTimeSeries {
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	IgniteCache<String, TimeSeries> timeSeriesCache;
-	IgniteCache<String, LogData> orderBookCache;
+	IgniteCache<Long, Double> totalProfitCache;
 	@Value("${supertrend.maxBarCount}")
 	private int maxBarCount;
 	@Value("${supertrend.smaSize}")
@@ -33,9 +33,9 @@ public class TradingBotOnMovingTimeSeries {
 		Ignite ignite = Ignition.start(cfg);
 		Ignition.setClientMode(true);
 		CacheConfiguration<String, TimeSeries> timeSeriesCCFG = new CacheConfiguration<String, TimeSeries>("TimeSeriesCache");
-		CacheConfiguration<String, LogData> orderBookCCFG = new CacheConfiguration<String, LogData>("OrderBookCache");
+		CacheConfiguration<Long, Double> totalProfitCCFG = new CacheConfiguration<Long, Double>("TotalProfitCache");
 		this.timeSeriesCache = ignite.getOrCreateCache(timeSeriesCCFG);
-		this.orderBookCache = ignite.getOrCreateCache(orderBookCCFG);
+		this.totalProfitCache = ignite.getOrCreateCache(totalProfitCCFG);
 	}
 
 	
@@ -44,7 +44,7 @@ public class TradingBotOnMovingTimeSeries {
 		logger.info("********************** Initialization **********************");
 		TimeSeries series = timeSeriesCache.get(seriesName);
 		logger.info("&&&&&&&& Series Name: "+seriesName);
-		superTrend.evaluate(series,orderBookCache);
+		superTrend.evaluate(series,totalProfitCache);
 
 	}
 

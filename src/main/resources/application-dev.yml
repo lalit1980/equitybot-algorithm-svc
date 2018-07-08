@@ -24,6 +24,7 @@ spring:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
       topic: notify-algo-seriesupdate-topic
+      topic-totalProfit: notify-kite-tpupdate-topic
      
       
   profiles: dev

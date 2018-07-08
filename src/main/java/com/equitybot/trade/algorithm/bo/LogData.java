@@ -25,7 +25,6 @@ public class LogData {
 	private double superTrend;
 	private String signal;
 	private Date transactionTime;
-	private double profitAndLoss;
 	public String getId() {
 		return id;
 	}
@@ -116,19 +115,14 @@ public class LogData {
 	public void setTransactionTime(Date transactionTime) {
 		this.transactionTime = transactionTime;
 	}
-	public double getProfitAndLoss() {
-		return profitAndLoss;
-	}
-	public void setProfitAndLoss(double profitAndLoss) {
-		this.profitAndLoss = profitAndLoss;
-	}
 	@Override
 	public String toString() {
 		return "LogData [id=" + id + ", instrumentToken=" + instrumentToken + ", open=" + open + ", high=" + high
 				+ ", low=" + low + ", close=" + close + ", trueRange=" + trueRange + ", ema=" + ema
 				+ ", basicUpperBand=" + basicUpperBand + ", basicLowerBand=" + basicLowerBand + ", finalUpperBand="
 				+ finalUpperBand + ", finalLowerBand=" + finalLowerBand + ", superTrend=" + superTrend + ", signal="
-				+ signal + ", transactionTime=" + transactionTime + ", profitAndLoss=" + profitAndLoss + "]";
+				+ signal + ", transactionTime=" + transactionTime + "]";
 	}
+	
 	
 }

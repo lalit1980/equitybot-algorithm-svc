@@ -26,6 +26,7 @@ public class ActionLogData {
 	private String signal;
 	private Date transactionTime;
 	private double profitAndLoss;
+	private double totalProfitLoss;
 	
 	public ActionLogData() {
 		
@@ -67,7 +68,6 @@ public class ActionLogData {
 		this.superTrend = logData.getSuperTrend();
 		this.signal = logData.getSignal();
 		this.transactionTime = logData.getTransactionTime();
-		this.profitAndLoss = logData.getProfitAndLoss();
 	}
 	public String getId() {
 		return id;
@@ -166,6 +166,15 @@ public class ActionLogData {
 		this.profitAndLoss = profitAndLoss;
 	}
 
+	public double getTotalProfitLoss() {
+		return totalProfitLoss;
+	}
+
+
+	public void setTotalProfitLoss(double totalProfitLoss) {
+		this.totalProfitLoss = totalProfitLoss;
+	}
+
 
 	@Override
 	public String toString() {
@@ -173,9 +182,10 @@ public class ActionLogData {
 				+ ", low=" + low + ", close=" + close + ", trueRange=" + trueRange + ", ema=" + ema
 				+ ", basicUpperBand=" + basicUpperBand + ", basicLowerBand=" + basicLowerBand + ", finalUpperBand="
 				+ finalUpperBand + ", finalLowerBand=" + finalLowerBand + ", superTrend=" + superTrend + ", signal="
-				+ signal + ", transactionTime=" + transactionTime + ", profitAndLoss=" + profitAndLoss + "]";
+				+ signal + ", transactionTime=" + transactionTime + ", profitAndLoss=" + profitAndLoss
+				+ ", totalProfitLoss=" + totalProfitLoss + "]";
 	}
-	
-	
 
+	
+	
 }
