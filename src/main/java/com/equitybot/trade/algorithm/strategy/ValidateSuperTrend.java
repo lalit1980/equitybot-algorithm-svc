@@ -25,8 +25,7 @@ public class ValidateSuperTrend {
     private int bandSize;
     @Value("${supertrend.smaSize}")
     private int smaSize;
-    @Value("${supertrend.csvPath}")
-    private String csvPath;
+
     @Autowired
 	private AlgorithmDataLoger algorithmDataLoger;
     

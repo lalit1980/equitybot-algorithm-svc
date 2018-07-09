@@ -1,11 +1,11 @@
 ### This is the main way to configure the application (other than annotations).
 ### This file is in Yaml format but you can also configure spring boot using the traditional
-### Java properties file format. 
+### Java properties file format.
 
 
 ### This is the main way to configure the application (other than annotations).
 ### This file is in Yaml format but you can also configure spring boot using the traditional
-### Java properties file format. 
+### Java properties file format.
 
 
 spring:
@@ -24,22 +24,28 @@ spring:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
       topic: ${ALGOSERIESUPDATETOPIC}
-     
-      
+      topic-totalProfit: ${ALGOSERIESTOALPROFITTOPIC}
+
+
   profiles: kubernetes
-  
+
   data:
     mongodb:
-      host: ${MONGODBHOST}
+      host: mongo
       port: 27017
       database: ${MONGODBDATABASE}
-      
+
 server:
   address: 0.0.0.0
   port: 9012
 
 tick:
   file:
-    Serializer: ${TICKFILEPATH}
+    Serializer: /data/logs
   barsize: 60
   maxserializetick: 1024
+supertrend:
+  bandSize: 3
+  smaSize: 7
+  csvPath: /data/logs
+  maxBarCount: 20
