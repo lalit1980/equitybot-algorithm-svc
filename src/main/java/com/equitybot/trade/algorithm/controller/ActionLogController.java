@@ -2,6 +2,7 @@ package com.equitybot.trade.algorithm.controller;
 
 import java.util.List;
 
+import com.equitybot.trade.algorithm.strategy.ValidateSuperTrend;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,5 +35,11 @@ public class ActionLogController {
 	public List<ActionLogData> findByInstrumentToken(@PathVariable("instrumentToken") long instrumentToken) {
 
 		return actionRepository.findByInstrumentToken(instrumentToken);
+	}
+
+	@GetMapping("/supertrend/clearcache/v1.0")
+	public void clearSuperTrendcache() {
+
+		ValidateSuperTrend.clearSuperTrendAnalyzerMap();
 	}
 }

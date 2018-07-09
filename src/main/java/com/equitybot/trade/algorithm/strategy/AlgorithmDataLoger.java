@@ -1,6 +1,5 @@
 package com.equitybot.trade.algorithm.strategy;
 
-import java.io.IOException;
 import java.util.Date;
 import java.util.UUID;
 
@@ -31,7 +30,7 @@ public class AlgorithmDataLoger {
 
 	public void logData(Bar workingBar, long instrumentToken, Decimal workingTrueRange, Decimal workingEMA,
 			Decimal workingBUB, Decimal workingBLB, Decimal workingFUB, Decimal workingFLB, Decimal workingSuperTrend,
-			String buySell) throws IOException {
+			String buySell){
 
 		LogData data = new LogData();
 		data.setInstrumentToken(instrumentToken);
@@ -55,7 +54,7 @@ public class AlgorithmDataLoger {
 
 	public void logActionLogData(Bar workingBar, long instrumentToken, Decimal workingTrueRange, Decimal workingEMA,
 			Decimal workingBUB, Decimal workingBLB, Decimal workingFUB, Decimal workingFLB, Decimal workingSuperTrend,
-			String buySell, Decimal profitAndLoss, Decimal totalProfitLoss) throws IOException {
+			String buySell, Decimal profitAndLoss, Decimal totalProfitLoss){
 
 		ActionLogData data = new ActionLogData();
 		data.setInstrumentToken(instrumentToken);

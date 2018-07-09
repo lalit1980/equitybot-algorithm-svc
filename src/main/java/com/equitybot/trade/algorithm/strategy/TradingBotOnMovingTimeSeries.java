@@ -19,7 +19,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.ta4j.core.TimeSeries;
 
-import com.equitybot.trade.algorithm.bo.LogData;
 
 @Service
 public class TradingBotOnMovingTimeSeries {
@@ -67,7 +66,7 @@ public class TradingBotOnMovingTimeSeries {
 		logger.info("********************** Initialization **********************");
 		TimeSeries series = timeSeriesCache.get(seriesName);
 		logger.info("&&&&&&&& Series Name: "+seriesName);
-		superTrend.evaluate(series,totalProfitCache);
+		superTrend.evaluate(series);
 
 	}
 
