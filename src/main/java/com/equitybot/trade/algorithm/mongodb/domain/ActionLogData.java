@@ -1,4 +1,4 @@
-package com.equitybot.trade.algorithm.bo;
+package com.equitybot.trade.algorithm.mongodb.domain;
 
 import java.util.Date;
 
@@ -27,6 +27,7 @@ public class ActionLogData {
 	private Date transactionTime;
 	private double profitAndLoss;
 	private double totalProfitLoss;
+	private String type;
 	
 	public ActionLogData() {
 		
@@ -176,6 +177,16 @@ public class ActionLogData {
 	}
 
 
+	public String getType() {
+		return type;
+	}
+
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+
 	@Override
 	public String toString() {
 		return "ActionLogData [id=" + id + ", instrumentToken=" + instrumentToken + ", open=" + open + ", high=" + high
@@ -183,7 +194,7 @@ public class ActionLogData {
 				+ ", basicUpperBand=" + basicUpperBand + ", basicLowerBand=" + basicLowerBand + ", finalUpperBand="
 				+ finalUpperBand + ", finalLowerBand=" + finalLowerBand + ", superTrend=" + superTrend + ", signal="
 				+ signal + ", transactionTime=" + transactionTime + ", profitAndLoss=" + profitAndLoss
-				+ ", totalProfitLoss=" + totalProfitLoss + "]";
+				+ ", totalProfitLoss=" + totalProfitLoss + ", type=" + type + "]";
 	}
 
 	

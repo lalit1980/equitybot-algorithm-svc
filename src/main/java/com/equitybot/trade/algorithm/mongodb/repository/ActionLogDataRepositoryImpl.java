@@ -8,7 +8,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 
-import com.equitybot.trade.algorithm.bo.ActionLogData;
+import com.equitybot.trade.algorithm.mongodb.domain.ActionLogData;
 
 public class ActionLogDataRepositoryImpl implements ActionLogDataRespositoryCustom {
 	@Autowired

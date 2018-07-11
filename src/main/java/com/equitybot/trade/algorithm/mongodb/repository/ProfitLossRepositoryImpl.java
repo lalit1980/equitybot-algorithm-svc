@@ -9,7 +9,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.data.domain.Sort;
 
-import com.equitybot.trade.algorithm.bo.ProfitLossData;
+import com.equitybot.trade.algorithm.mongodb.domain.ProfitLossData;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 

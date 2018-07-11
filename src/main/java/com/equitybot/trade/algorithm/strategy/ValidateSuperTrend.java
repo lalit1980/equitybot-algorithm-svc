@@ -5,7 +5,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.ta4j.core.Decimal;
 import org.ta4j.core.TimeSeries;
 
 import java.io.IOException;
@@ -13,6 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
+@Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
 public class ValidateSuperTrend {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -50,6 +55,13 @@ public class ValidateSuperTrend {
 
     public static void clearSuperTrendAnalyzerMap(){
         ValidateSuperTrend.superTrendAnalyzerMap = new HashMap<>();
+    }
+    
+    public void stopLoss( Decimal closePrice, Long instrument) {
+            SuperTrendAnalyzer superTrendAnalyzer = ValidateSuperTrend.superTrendAnalyzerMap.get(instrument);
+            if (superTrendAnalyzer != null) {
+            	superTrendAnalyzer.stopLoss(closePrice);
+            }
     }
 
 }

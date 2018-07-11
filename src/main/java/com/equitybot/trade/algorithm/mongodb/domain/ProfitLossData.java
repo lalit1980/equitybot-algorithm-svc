@@ -1,4 +1,4 @@
-package com.equitybot.trade.algorithm.bo;
+package com.equitybot.trade.algorithm.mongodb.domain;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.equitybot.trade.algorithm.bo.ActionLogData;
+import com.equitybot.trade.algorithm.mongodb.domain.ActionLogData;
 import com.equitybot.trade.algorithm.mongodb.repository.ActionLogDataRepository;
 
 @RestController

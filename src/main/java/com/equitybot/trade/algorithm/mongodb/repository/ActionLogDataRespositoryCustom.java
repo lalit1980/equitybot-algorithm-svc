@@ -2,7 +2,7 @@ package com.equitybot.trade.algorithm.mongodb.repository;
 
 import java.util.List;
 
-import com.equitybot.trade.algorithm.bo.ActionLogData;
+import com.equitybot.trade.algorithm.mongodb.domain.ActionLogData;
 
 public interface ActionLogDataRespositoryCustom {
 	

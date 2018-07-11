@@ -1,8 +1,18 @@
 package com.equitybot.trade.algorithm.strategy;
 
 import com.equitybot.trade.algorithm.constants.Constant;
+import com.equitybot.trade.bo.NormalTradeOrderRequestBO;
+import com.google.gson.Gson;
+import com.zerodhatech.kiteconnect.utils.Constants;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.support.SendResult;
+import org.springframework.util.concurrent.ListenableFuture;
+import org.springframework.util.concurrent.ListenableFutureCallback;
 import org.ta4j.core.Bar;
 import org.ta4j.core.Decimal;
 
@@ -12,6 +22,12 @@ import java.util.List;
 public class SuperTrendAnalyzer extends BaseIndicator {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    @Value("${spring.kafka.producer.topic-orderprocess}")
+	private String orderProcessProducerTopic;
+	@Autowired
+	private KafkaTemplate<String, String> kafkaTemplate;
+	
+	
     private int bandSize;
     private final int smaSize;
     private long instrument;
@@ -104,24 +120,56 @@ public class SuperTrendAnalyzer extends BaseIndicator {
         if (buySell != null && this.havebuy && Constant.SELL.equals(buySell)) {
             Decimal currentProfitLoss = workingBar.getClosePrice().minus(this.lastBuyBar.getClosePrice());
             this.totalProfitLoss = this.totalProfitLoss.plus(currentProfitLoss);
-            this.algorithmDataLoger.logActionLogData(workingBar, this.getInstrument(), workingTrueRange, workingEMA,
+            this.algorithmDataLoger.logActionLogData(workingBar.getOpenPrice(),workingBar.getMaxPrice(), workingBar.getMinPrice(),workingBar.getClosePrice(), this.getInstrument(), workingTrueRange, workingEMA,
                     workingBUB, workingBLB, workingFUB, workingFLB, workingSuperTrend, buySell, currentProfitLoss,
-                    this.totalProfitLoss);
+                    this.totalProfitLoss,"SuperTrend");
             this.algorithmDataLoger.logProfitLossRepository(this.getInstrument(), this.totalProfitLoss.doubleValue());
+            
             this.havebuy = false;
 
         } else if (buySell != null && !this.havebuy && Constant.BUY.equals(buySell)) {
             this.havebuy = true;
             this.lastBuyBar = workingBar;
-            this.algorithmDataLoger.logActionLogData(workingBar, this.getInstrument(), workingTrueRange, workingEMA,
+            this.algorithmDataLoger.logActionLogData(workingBar.getOpenPrice(),workingBar.getMaxPrice(), workingBar.getMinPrice(),workingBar.getClosePrice(), this.getInstrument(), workingTrueRange, workingEMA,
                     workingBUB, workingBLB, workingFUB, workingFLB, workingSuperTrend, buySell, Decimal.ZERO,
-                    Decimal.ZERO);
+                    Decimal.ZERO,"SuperTrend");
+            /*NormalTradeOrderRequestBO orderBo=new NormalTradeOrderRequestBO();
+            orderBo.setInstrumentToken(this.getInstrument());
+            orderBo.setTransactionType(Constants.TRANSACTION_TYPE_BUY);
+            String newJson = new Gson().toJson(orderBo);
+            ListenableFuture<SendResult<String, String>> future = kafkaTemplate.send(orderProcessProducerTopic,newJson);
+    		future.addCallback(new ListenableFutureCallback<SendResult<String, String>>() {
+    			@Override
+    			public void onSuccess(SendResult<String, String> result) {
+    				 logger.info("Sent message: " + result);
+    			}
+
+    			@Override
+    			public void onFailure(Throwable ex) {
+    				logger.info("Failed to send message");
+    			}
+    		});*/
         }
 
     }
 
     public long getInstrument() {
         return this.instrument;
+    }
+    
+    public void stopLoss(Decimal closePrice) {
+    	
+        if (this.havebuy && this.lastBuyBar.getClosePrice().minus(closePrice)
+        		.isGreaterThanOrEqual(this.lastBuyBar.getClosePrice().multipliedBy(5).dividedBy(100))) {
+        	 Decimal currentProfitLoss = closePrice.minus(this.lastBuyBar.getClosePrice());
+             this.totalProfitLoss = this.totalProfitLoss.plus(currentProfitLoss);
+             this.algorithmDataLoger.logActionLogData(Decimal.ZERO,Decimal.ZERO, Decimal.ZERO,closePrice, this.getInstrument(), Decimal.ZERO, Decimal.ZERO,
+            		 Decimal.ZERO, Decimal.ZERO, Decimal.ZERO, Decimal.ZERO, Decimal.ZERO, "", Decimal.ZERO,
+                     Decimal.ZERO,"stopLoss");
+             this.algorithmDataLoger.logProfitLossRepository(this.getInstrument(), this.totalProfitLoss.doubleValue());
+             this.havebuy = false;
+        }
+    	
     }
 
 }

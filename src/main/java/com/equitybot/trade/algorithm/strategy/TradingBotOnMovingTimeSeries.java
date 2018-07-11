@@ -31,33 +31,14 @@ public class TradingBotOnMovingTimeSeries {
 	private int smaSize;
 	@Autowired
 	ValidateSuperTrend superTrend;
-
+	
 	public TradingBotOnMovingTimeSeries() {
+		
 		IgniteConfiguration cfg = new IgniteConfiguration();
-		TcpDiscoverySpi tcpDiscoverySpi= new TcpDiscoverySpi();
-		TcpDiscoveryKubernetesIpFinder ipFinder  = new TcpDiscoveryKubernetesIpFinder();
-		ipFinder.setServiceName("ignite");
-		tcpDiscoverySpi.setIpFinder(ipFinder);
-		cfg.setDiscoverySpi(tcpDiscoverySpi);
-		cfg.setPeerClassLoadingEnabled(true);
-		cfg.setClientMode(true);
 		Ignite ignite = Ignition.start(cfg);
 		Ignition.setClientMode(true);
-		ignite.active(true);
-		CacheConfiguration<String, TimeSeries> timeSeriesCCFG = new CacheConfiguration<String, TimeSeries>("TimeSeriesCache");
-		timeSeriesCCFG.setAtomicityMode(CacheAtomicityMode.ATOMIC);
-		timeSeriesCCFG.setCacheMode(CacheMode.PARTITIONED);
-		timeSeriesCCFG.setRebalanceMode(CacheRebalanceMode.NONE);
-		timeSeriesCCFG.setDataRegionName("1GB_Region");
-		 timeSeriesCCFG = new CacheConfiguration<String, TimeSeries>("TimeSeriesCache");
-		CacheConfiguration<Long, Double> totalProfitCCFG = new CacheConfiguration<Long, Double>("TotalProfitCache");
-		totalProfitCCFG.setAtomicityMode(CacheAtomicityMode.ATOMIC);
-		totalProfitCCFG.setCacheMode(CacheMode.PARTITIONED);
-		totalProfitCCFG.setRebalanceMode(CacheRebalanceMode.NONE);
-		totalProfitCCFG.setDataRegionName("1GB_Region");
-		totalProfitCCFG = new CacheConfiguration<Long, Double>("TotalProfitCache");
-		this.timeSeriesCache = ignite.getOrCreateCache(timeSeriesCCFG);
-		this.totalProfitCache = ignite.getOrCreateCache(totalProfitCCFG);
+		CacheConfiguration<String, TimeSeries> ccfg = new CacheConfiguration<String, TimeSeries>("TimeSeriesCache");
+		this.timeSeriesCache = ignite.getOrCreateCache(ccfg);
 	}
 
 	
@@ -70,11 +51,15 @@ public class TradingBotOnMovingTimeSeries {
 
 	}
 
-	public IgniteCache<String, TimeSeries> getCache() {
+
+	public IgniteCache<String, TimeSeries> getTimeSeriesCache() {
 		return timeSeriesCache;
 	}
 
-	public void setCache(IgniteCache<String, TimeSeries> cache) {
-		this.timeSeriesCache = cache;
+
+	public void setTimeSeriesCache(IgniteCache<String, TimeSeries> timeSeriesCache) {
+		this.timeSeriesCache = timeSeriesCache;
 	}
+
+	
 }

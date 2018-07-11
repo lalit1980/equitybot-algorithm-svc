@@ -2,7 +2,7 @@ package com.equitybot.trade.algorithm.mongodb.repository;
 
 import java.util.List;
 
-import com.equitybot.trade.algorithm.bo.LogData;
+import com.equitybot.trade.algorithm.mongodb.domain.LogData;
 
 public interface LogDataRespositoryCustom {
 	public List<LogData> findByInstrumentToken(long token);

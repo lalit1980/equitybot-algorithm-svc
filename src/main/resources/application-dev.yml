@@ -14,6 +14,7 @@ spring:
     consumer:
       zerodha-order-consume-topic: notify-algo-seriesupdate-topic
       groupid: zerodha-series-group-id
+      groupid_tick: zerodha-tick-group-id
       auto-offset-reset: earliest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
@@ -24,7 +25,7 @@ spring:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
       topic: notify-algo-seriesupdate-topic
-      topic-totalProfit: notify-kite-tpupdate-topic
+      topic-orderprocess: kite-orderprocess-topic
      
       
   profiles: dev

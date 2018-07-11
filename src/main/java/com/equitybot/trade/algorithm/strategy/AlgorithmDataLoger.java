@@ -10,9 +10,9 @@ import org.springframework.stereotype.Service;
 import org.ta4j.core.Bar;
 import org.ta4j.core.Decimal;
 
-import com.equitybot.trade.algorithm.bo.ActionLogData;
-import com.equitybot.trade.algorithm.bo.LogData;
-import com.equitybot.trade.algorithm.bo.ProfitLossData;
+import com.equitybot.trade.algorithm.mongodb.domain.ActionLogData;
+import com.equitybot.trade.algorithm.mongodb.domain.LogData;
+import com.equitybot.trade.algorithm.mongodb.domain.ProfitLossData;
 import com.equitybot.trade.algorithm.mongodb.repository.ActionLogDataRepository;
 import com.equitybot.trade.algorithm.mongodb.repository.LogDataRepository;
 import com.equitybot.trade.algorithm.mongodb.repository.ProfitLossRepository;
@@ -52,16 +52,16 @@ public class AlgorithmDataLoger {
 		repo.saveTickData(data);
 	}
 
-	public void logActionLogData(Bar workingBar, long instrumentToken, Decimal workingTrueRange, Decimal workingEMA,
+	public void logActionLogData(Decimal openPrice,Decimal maxPrice, Decimal minPrice, Decimal closePrice, long instrumentToken, Decimal workingTrueRange, Decimal workingEMA,
 			Decimal workingBUB, Decimal workingBLB, Decimal workingFUB, Decimal workingFLB, Decimal workingSuperTrend,
-			String buySell, Decimal profitAndLoss, Decimal totalProfitLoss){
+			String buySell, Decimal profitAndLoss, Decimal totalProfitLoss, String type){
 
 		ActionLogData data = new ActionLogData();
 		data.setInstrumentToken(instrumentToken);
-		data.setOpen(workingBar.getOpenPrice().doubleValue());
-		data.setHigh(workingBar.getMaxPrice().doubleValue());
-		data.setLow(workingBar.getMinPrice().doubleValue());
-		data.setClose(workingBar.getClosePrice().doubleValue());
+		data.setOpen(openPrice.doubleValue());
+		data.setHigh(maxPrice.doubleValue());
+		data.setLow(minPrice.doubleValue());
+		data.setClose(closePrice.doubleValue());
 		data.setTrueRange(workingTrueRange.doubleValue());
 		data.setEma(workingEMA.doubleValue());
 		data.setBasicUpperBand(workingBUB.doubleValue());
@@ -74,6 +74,7 @@ public class AlgorithmDataLoger {
 		data.setTransactionTime(new Date());
 		data.setProfitAndLoss(profitAndLoss.doubleValue());
 		data.setTotalProfitLoss(totalProfitLoss.doubleValue());
+		data.setType(type);
 		logger.info(data.toString());
 		actionRepo.saveActionLogData(data);
 	}
