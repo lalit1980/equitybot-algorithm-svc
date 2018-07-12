@@ -20,17 +20,17 @@ public class TickReceiverListener {
 	@Autowired
 	private ValidateSuperTrend validateSuperTrend;
 
-	@KafkaListener(id = "id0", topicPartitions = {
-			@TopicPartition(topic = "zerodha-tickdataservice-publish", partitions = { "0" }) })
+	@KafkaListener(id = "id9", topicPartitions = {
+			@TopicPartition(topic = "topic-kite-tick", partitions = { "0" }) })
 	public void listenPartition0(ConsumerRecord<?, ?> record) throws IOException {
 		Gson gson = new Gson();
 		Tick unitData = gson.fromJson(record.value().toString(), Tick.class);
-		logger.info("ID0 received: "+unitData.toString());
+		logger.info("ID9 received: "+unitData.toString());
 		processRequest(unitData);
 	}
 
-	@KafkaListener(id = "id1", topicPartitions = {
-			@TopicPartition(topic = "zerodha-tickdataservice-publish", partitions = { "1" }) })
+	@KafkaListener(id = "id10", topicPartitions = {
+			@TopicPartition(topic = "topic-kite-tick", partitions = { "1" }) })
 	public void listenPartition1(ConsumerRecord<?, ?> record) throws IOException {
 		Gson gson = new Gson();
 		Tick unitData = gson.fromJson(record.value().toString(), Tick.class);
@@ -38,8 +38,8 @@ public class TickReceiverListener {
 		processRequest(unitData);
 	}
 
-	@KafkaListener(id = "id2", topicPartitions = {
-			@TopicPartition(topic = "zerodha-tickdataservice-publish", partitions = { "2" }) })
+	@KafkaListener(id = "id11", topicPartitions = {
+			@TopicPartition(topic = "topic-kite-tick", partitions = { "2" }) })
 	public void listenPartition2(ConsumerRecord<?, ?> record) throws IOException {
 		Gson gson = new Gson();
 		Tick unitData = gson.fromJson(record.value().toString(), Tick.class);

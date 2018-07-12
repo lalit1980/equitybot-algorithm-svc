@@ -19,11 +19,11 @@ import com.equitybot.trade.algorithm.messaging.kafka.listener.TimeSeriesReceiver
 
 @EnableKafka
 @Configuration
-public class KafkaConsumerTickerConfig {
+public class KafkaConsumerTimeSeriesConfig {
 	 	@Value("${spring.kafka.bootstrap-servers}")
 	    private String bootstrapServers;
 	 	
-	 	@Value("${spring.kafka.consumer.groupid}")
+	 	@Value("${spring.kafka.consumer.groupid-seriesupdate}")
 	    private String groupId;
 	 	
 	 	@Bean
@@ -49,7 +49,7 @@ public class KafkaConsumerTickerConfig {
 			propsMap.put(ConsumerConfig.SESSION_TIMEOUT_MS_CONFIG, "15000");
 			propsMap.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
 			propsMap.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-			propsMap.put(ConsumerConfig.GROUP_ID_CONFIG, groupId);
+			propsMap.put(ConsumerConfig.GROUP_ID_CONFIG, "groupid-seriesupdate");
 			propsMap.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
 			return propsMap;
 		}

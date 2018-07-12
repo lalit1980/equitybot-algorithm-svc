@@ -22,19 +22,19 @@ public class TimeSeriesReceiverListener {
     @Autowired
     TradingBotOnMovingTimeSeries tradeBot;
 
-    @KafkaListener(id = "id0", topicPartitions = {@TopicPartition(topic = "notify-algo-seriesupdate-topic", partitions = {"0"})})
+    @KafkaListener(id = "id0", topicPartitions = {@TopicPartition(topic = "topic-data-seriesupdate", partitions = {"0"})})
     public void listenPartition0(ConsumerRecord<?, ?> record) throws IOException {
     	logger.info("1: Received Times Series update: "+record.value().toString());
     	processRequest(record.value().toString());
     }
 
-    @KafkaListener(id = "id1", topicPartitions = {@TopicPartition(topic = "notify-algo-seriesupdate-topic", partitions = {"1"})})
+    @KafkaListener(id = "id1", topicPartitions = {@TopicPartition(topic = "topic-data-seriesupdate", partitions = {"1"})})
     public void listenPartition1(ConsumerRecord<?, ?> record) throws IOException {
     	logger.info("2: Received Times Series update: "+record.value().toString());
     	processRequest(record.value().toString());
     }
 
-    @KafkaListener(id = "id2", topicPartitions = {@TopicPartition(topic = "notify-algo-seriesupdate-topic", partitions = {"2"})})
+    @KafkaListener(id = "id2", topicPartitions = {@TopicPartition(topic = "topic-data-seriesupdate", partitions = {"2"})})
     public void listenPartition2(ConsumerRecord<?, ?> record) throws IOException {
     	logger.info("3: Received Times Series update: "+record.value().toString());
     	processRequest(record.value().toString());

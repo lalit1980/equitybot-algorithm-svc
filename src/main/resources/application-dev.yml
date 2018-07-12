@@ -12,20 +12,22 @@ spring:
   kafka:
     bootstrap-servers: localhost:9092,localhost:9093,localhost:9094
     consumer:
-      zerodha-order-consume-topic: notify-algo-seriesupdate-topic
-      groupid: zerodha-series-group-id
-      groupid_tick: zerodha-tick-group-id
+      topic-data-seriesupdate: topic-data-seriesupdate
+      topic-kite-tick: topic-kite-tick
+      groupid-seriesupdate: group-id-series-05
+      groupid_tick: group-id-tick-06
       auto-offset-reset: earliest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       from:
         beginning: true
-        groupid: zerodha-series-group-id
+        groupid: group-id-series-07
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
-      topic: notify-algo-seriesupdate-topic
-      topic-orderprocess: kite-orderprocess-topic
+      topic-kite-tick: topic-kite-tick
+      topic-data-seriesupdate: topic-data-seriesupdate
+      topic-kite-tradeorder: topic-kite-tradeorder
      
       
   profiles: dev
