@@ -8,19 +8,20 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.annotation.TopicPartition;
+import org.springframework.stereotype.Service;
 import org.ta4j.core.Decimal;
 
 import com.equitybot.trade.algorithm.strategy.ValidateSuperTrend;
 import com.equitybot.trade.bo.Tick;
 import com.google.gson.Gson;
-
+@Service
 public class TickReceiverListener {
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 	@Autowired
 	private ValidateSuperTrend validateSuperTrend;
-
-	@KafkaListener(id = "id9", topicPartitions = {
+	
+	@KafkaListener(topicPartitions = {
 			@TopicPartition(topic = "topic-kite-tick", partitions = { "0" }) })
 	public void listenPartition0(ConsumerRecord<?, ?> record) throws IOException {
 		Gson gson = new Gson();
@@ -29,7 +30,7 @@ public class TickReceiverListener {
 		processRequest(unitData);
 	}
 
-	@KafkaListener(id = "id10", topicPartitions = {
+	@KafkaListener(topicPartitions = {
 			@TopicPartition(topic = "topic-kite-tick", partitions = { "1" }) })
 	public void listenPartition1(ConsumerRecord<?, ?> record) throws IOException {
 		Gson gson = new Gson();
@@ -38,7 +39,7 @@ public class TickReceiverListener {
 		processRequest(unitData);
 	}
 
-	@KafkaListener(id = "id11", topicPartitions = {
+	@KafkaListener(topicPartitions = {
 			@TopicPartition(topic = "topic-kite-tick", partitions = { "2" }) })
 	public void listenPartition2(ConsumerRecord<?, ?> record) throws IOException {
 		Gson gson = new Gson();

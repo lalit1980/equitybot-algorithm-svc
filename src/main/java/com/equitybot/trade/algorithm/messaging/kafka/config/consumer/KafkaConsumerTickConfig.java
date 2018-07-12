@@ -5,6 +5,8 @@ import java.util.Map;
 
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,7 +18,6 @@ import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.listener.ConcurrentMessageListenerContainer;
 
 import com.equitybot.trade.algorithm.messaging.kafka.listener.TickReceiverListener;
-import com.equitybot.trade.algorithm.messaging.kafka.listener.TimeSeriesReceiverListener;
 
 @EnableKafka
 @Configuration
@@ -26,10 +27,11 @@ public class KafkaConsumerTickConfig {
 	 	
 	 	@Value("${spring.kafka.consumer.groupid_tick}")
 	    private String groupId;
-	 	
+	 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	 	@Bean
 		KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, String>> kafkaListenerContainerFactory() {
-			ConcurrentKafkaListenerContainerFactory<String, String> factory = new ConcurrentKafkaListenerContainerFactory<>();
+	 		logger.info("Test inside kafkaListenerContainerFactory.......................");
+	 		ConcurrentKafkaListenerContainerFactory<String, String> factory = new ConcurrentKafkaListenerContainerFactory<>();
 			factory.setConsumerFactory(consumerFactory());
 			factory.setConcurrency(3);
 			factory.getContainerProperties().setPollTimeout(3000);
@@ -38,11 +40,13 @@ public class KafkaConsumerTickConfig {
 
 		@Bean
 		public ConsumerFactory<String, String> consumerFactory() {
+			logger.info("Test inside consumerFactory.......................");
 			return new DefaultKafkaConsumerFactory<>(consumerConfigs());
 		}
 
 		@Bean
 		public Map<String, Object> consumerConfigs() {
+			logger.info("Test inside consumerConfigs.......................");
 			Map<String, Object> propsMap = new HashMap<>();
 			propsMap.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
 			propsMap.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, false);
@@ -50,13 +54,14 @@ public class KafkaConsumerTickConfig {
 			propsMap.put(ConsumerConfig.SESSION_TIMEOUT_MS_CONFIG, "15000");
 			propsMap.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
 			propsMap.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-			propsMap.put(ConsumerConfig.GROUP_ID_CONFIG, "groupid_tick");
+			propsMap.put(ConsumerConfig.GROUP_ID_CONFIG, groupId);
 			propsMap.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
 			return propsMap;
 		}
 
 		@Bean
 		public TickReceiverListener listener() {
+			logger.info("returning listener.......................");
 			return new TickReceiverListener();
 		}
 }
