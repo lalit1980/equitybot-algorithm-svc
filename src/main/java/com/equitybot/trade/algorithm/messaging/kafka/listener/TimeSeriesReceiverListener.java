@@ -16,25 +16,27 @@ import com.equitybot.trade.algorithm.strategy.TradingBotOnMovingTimeSeries;
 @Service
 public class TimeSeriesReceiverListener {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
-    
-    @Value("${spring.kafka.bootstrap-servers}")
-    private String bootstrapServers;
+
+
     @Autowired
     TradingBotOnMovingTimeSeries tradeBot;
 
-    @KafkaListener(topicPartitions = {@TopicPartition(topic = "topic-data-seriesupdate", partitions = {"0"})})
+    @KafkaListener(topicPartitions = {
+            @TopicPartition(topic = "${spring.kafka.consumer.topic-data-seriesupdate}", partitions = { "0" }) })
     public void listenPartition0(ConsumerRecord<?, ?> record) throws IOException {
     	logger.info("1: Received Times Series update: "+record.value().toString());
     	processRequest(record.value().toString());
     }
 
-    @KafkaListener(topicPartitions = {@TopicPartition(topic = "topic-data-seriesupdate", partitions = {"1"})})
+    @KafkaListener( topicPartitions = {
+            @TopicPartition(topic = "${spring.kafka.consumer.topic-data-seriesupdate}", partitions = { "0" }) })
     public void listenPartition1(ConsumerRecord<?, ?> record) throws IOException {
     	logger.info("2: Received Times Series update: "+record.value().toString());
     	processRequest(record.value().toString());
     }
 
-    @KafkaListener(topicPartitions = {@TopicPartition(topic = "topic-data-seriesupdate", partitions = {"2"})})
+    @KafkaListener( topicPartitions = {
+            @TopicPartition(topic = "${spring.kafka.consumer.topic-data-seriesupdate}", partitions = { "0" }) })
     public void listenPartition2(ConsumerRecord<?, ?> record) throws IOException {
     	logger.info("3: Received Times Series update: "+record.value().toString());
     	processRequest(record.value().toString());
