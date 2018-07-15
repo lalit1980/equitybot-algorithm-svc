@@ -1,5 +1,4 @@
 
-.project
 .settings/org.eclipse.core.resources.prefs
 target/classes/application-dev.yml
 target/classes/application-kubernetes.yml
