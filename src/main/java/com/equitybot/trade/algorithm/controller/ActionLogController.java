@@ -37,7 +37,7 @@ public class ActionLogController {
 		return actionRepository.findByInstrumentToken(instrumentToken);
 	}
 
-	@GetMapping("/supertrend/clearcache/v1.0")
+	@GetMapping("/actionlog/clearcache/v1.0")
 	public void clearSuperTrendcache() {
 
 		ValidateSuperTrend.clearSuperTrendAnalyzerMap();

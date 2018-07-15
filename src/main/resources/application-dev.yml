@@ -8,50 +8,47 @@
 ### Java properties file format. 
 
 
-spring:
-  kafka:
-    bootstrap-servers: localhost:9092,localhost:9093,localhost:9094
-    consumer:
-      topic-data-seriesupdate: topic-data-seriesupdate
-      topic-kite-tick: topic-kite-tick
-      groupid-seriesupdate: group-id-series-05
-      groupid_tick: group-id-tick-06
-      auto-offset-reset: earliest
-      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      from:
-        beginning: true
-        groupid: group-id-series-07
-    producer:
-      key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.apache.kafka.common.serialization.StringSerializer
-      topic-kite-tick: topic-kite-tick
-      topic-data-seriesupdate: topic-data-seriesupdate
-      topic-kite-tradeorder: topic-kite-tradeorder
-     
-      
-  profiles: dev
-  
-  data:
-    mongodb:
+selector: 
+  max-instrument-price-per-stock: 1000
+  max-total-price: 800000
+  order-quantity: 400
+server: 
+  address: "127.0.0.1"
+  port: 9012
+spring: 
+  data: 
+    mongodb: 
+      database: hc4
       host: localhost
       port: 27017
-      database: hc4
-
-server:
-  address: 127.0.0.1
-  port: 9012
-
-tick:
-  file:
-    Serializer: /Users/lalitsingh/data/TestData
-  barsize: 60
-  maxserializetick: 1024
-supertrend:
+  kafka: 
+    bootstrap-servers: "localhost:9092,localhost:9093,localhost:9094"
+    consumer: 
+      auto-offset-reset: earliest
+      from: 
+        beginning: true
+        groupid: group-id-series-07
+      groupid-seriesupdate: group-id-series-05
+      groupid_tick: group-id-tick-06
+      groupid_tradeorder: groupid_tradeorder-01
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      topic-data-seriesupdate: topic-data-seriesupdate
+      topic-kite-tick: topic-kite-tick
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    producer: 
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      topic-data-seriesupdate: topic-data-seriesupdate
+      topic-kite-tick: topic-kite-tick
+      topic-kite-tradeorder: topic-kite-tradeorder
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+  profiles: dev
+supertrend: 
   bandSize: 3
-  smaSize: 7
   csvPath: /Users/lalitsingh/data/csv/
   maxBarCount: 20
-selector:
-  max-instrument-price-per-stock: 100
-  max-total-price: 8000
+  smaSize: 7
+tick: 
+  barsize: 60
+  file: 
+    Serializer: /Users/lalitsingh/data/TestData
+  maxserializetick: 1024

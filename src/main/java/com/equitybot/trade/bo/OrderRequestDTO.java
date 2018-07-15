@@ -1,11 +1,15 @@
 package com.equitybot.trade.bo;
 
-public class NormalTradeOrderRequestBO {
+import java.io.Serializable;
 
+public class OrderRequestDTO implements Serializable{
+
+	private String id;
+	private String orderId;
 	private long instrumentToken;
 	private String userId;
 	private String requestToken;
-	private long quantity;
+	private int quantity;
 	private String orderType;
 	private String tradingsymbol;
 	private String product;
@@ -14,7 +18,11 @@ public class NormalTradeOrderRequestBO {
 	private String validity;
 	private double price;
 	private double triggerPrice;
+	private double trailingStopLossPrice;
+	private double stopLossPrice;
+	private double targetPrice;
 	private String tag;
+	private String variety;
 	public long getInstrumentToken() {
 		return instrumentToken;
 	}
@@ -33,10 +41,10 @@ public class NormalTradeOrderRequestBO {
 	public void setRequestToken(String requestToken) {
 		this.requestToken = requestToken;
 	}
-	public long getQuantity() {
+	public int getQuantity() {
 		return quantity;
 	}
-	public void setQuantity(long quantity) {
+	public void setQuantity(int quantity) {
 		this.quantity = quantity;
 	}
 	public String getOrderType() {
@@ -93,13 +101,50 @@ public class NormalTradeOrderRequestBO {
 	public void setTag(String tag) {
 		this.tag = tag;
 	}
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
 	@Override
 	public String toString() {
-		return "NormalTradeOrderRequestBO [instrumentToken=" + instrumentToken + ", userId=" + userId
-				+ ", requestToken=" + requestToken + ", quantity=" + quantity + ", orderType=" + orderType
-				+ ", tradingsymbol=" + tradingsymbol + ", product=" + product + ", exchange=" + exchange
+		return "OrderRequestDTO [id=" + id + ", orderId=" + orderId + ", instrumentToken=" + instrumentToken
+				+ ", userId=" + userId + ", requestToken=" + requestToken + ", quantity=" + quantity + ", orderType="
+				+ orderType + ", tradingsymbol=" + tradingsymbol + ", product=" + product + ", exchange=" + exchange
 				+ ", transactionType=" + transactionType + ", validity=" + validity + ", price=" + price
-				+ ", triggerPrice=" + triggerPrice + ", tag=" + tag + "]";
+				+ ", triggerPrice=" + triggerPrice + ", trailingStopLossPrice=" + trailingStopLossPrice
+				+ ", stopLossPrice=" + stopLossPrice + ", targetPrice=" + targetPrice + ", tag=" + tag + ", variety="
+				+ variety + "]";
 	}
-	
+	public double getTrailingStopLossPrice() {
+		return trailingStopLossPrice;
+	}
+	public void setTrailingStopLossPrice(double trailingStopLossPrice) {
+		this.trailingStopLossPrice = trailingStopLossPrice;
+	}
+	public double getStopLossPrice() {
+		return stopLossPrice;
+	}
+	public void setStopLossPrice(double stopLossPrice) {
+		this.stopLossPrice = stopLossPrice;
+	}
+	public double getTargetPrice() {
+		return targetPrice;
+	}
+	public void setTargetPrice(double targetPrice) {
+		this.targetPrice = targetPrice;
+	}
+	public String getOrderId() {
+		return orderId;
+	}
+	public void setOrderId(String orderId) {
+		this.orderId = orderId;
+	}
+	public String getVariety() {
+		return variety;
+	}
+	public void setVariety(String variety) {
+		this.variety = variety;
+	}
 }

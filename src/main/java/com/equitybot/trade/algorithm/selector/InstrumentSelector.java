@@ -1,5 +1,6 @@
 package com.equitybot.trade.algorithm.selector;
 
+import com.equitybot.trade.algorithm.ignite.configs.IgniteConfig;
 import com.equitybot.trade.algorithm.strategy.SuperTrendAnalyzer;
 import com.zerodhatech.models.Depth;
 import com.zerodhatech.models.Tick;
@@ -10,6 +11,7 @@ import org.apache.ignite.configuration.CacheConfiguration;
 import org.apache.ignite.configuration.IgniteConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.ta4j.core.Decimal;
@@ -26,14 +28,11 @@ public class InstrumentSelector {
     private double maxInstrumentPricePerStockLimit;
     @Value("${selector.max-total-price}")
     private double maxTotalPriceLimit;
-
+    @Autowired
+	IgniteConfig igniteConfig;
     public InstrumentSelector() {
-
-        IgniteConfiguration cfg = new IgniteConfiguration();
-        Ignite ignite = Ignition.start(cfg);
-        Ignition.setClientMode(true);
         CacheConfiguration<Long, Tick> ccfgLatestTickParams = new CacheConfiguration<>("CachedLatestTick");
-        this.cacheLatestTick = ignite.getOrCreateCache(ccfgLatestTickParams);
+        this.cacheLatestTick = igniteConfig.getInstance().getOrCreateCache(ccfgLatestTickParams);
     }
 
     public boolean eligibleInstrument(Long instrument, double expectedPrice){

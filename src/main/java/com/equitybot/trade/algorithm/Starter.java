@@ -27,8 +27,8 @@ public class Starter {
 		return new Docket(DocumentationType.SWAGGER_2)
 				.groupName("actionlog-api-1.0")
 				.select()
-					.apis(RequestHandlerSelectors.basePackage("com.equitybot.trade.algorithm.controller.ActionLogController"))
-					.paths(regex("/api/actionlog/v1.0.*"))
+					.apis(RequestHandlerSelectors.basePackage("com.equitybot.trade.algorithm.controller"))
+					.paths(regex("/actionlog/v1.0.*"))
 				.build()
 				.apiInfo(new ApiInfoBuilder().version("1.0").title("Action Log API").description("Action Log API v1.0").build());
 	}

@@ -48,7 +48,6 @@ public class AlgorithmDataLoger {
 		data.setSignal(buySell);
 		data.setId(UUID.randomUUID().toString());
 		data.setTransactionTime(new Date());
-		logger.info(data.toString());
 		repo.saveTickData(data);
 	}
 
@@ -58,24 +57,14 @@ public class AlgorithmDataLoger {
 
 		ActionLogData data = new ActionLogData();
 		data.setInstrumentToken(instrumentToken);
-		data.setOpen(openPrice.doubleValue());
-		data.setHigh(maxPrice.doubleValue());
-		data.setLow(minPrice.doubleValue());
 		data.setClose(closePrice.doubleValue());
-		data.setTrueRange(workingTrueRange.doubleValue());
-		data.setEma(workingEMA.doubleValue());
-		data.setBasicUpperBand(workingBUB.doubleValue());
-		data.setBasicLowerBand(workingBLB.doubleValue());
-		data.setFinalUpperBand(workingFUB.doubleValue());
-		data.setFinalLowerBand(workingFLB.doubleValue());
-		data.setSuperTrend(workingSuperTrend.doubleValue());
 		data.setSignal(buySell);
 		data.setId(UUID.randomUUID().toString());
 		data.setTransactionTime(new Date());
 		data.setProfitAndLoss(profitAndLoss.doubleValue());
 		data.setTotalProfitLoss(totalProfitLoss.doubleValue());
 		data.setType(type);
-		logger.info(data.toString());
+		logger.info("Instrument Token: "+instrumentToken+" Order Detail: "+data.toString());
 		actionRepo.saveActionLogData(data);
 	}
 
@@ -85,7 +74,7 @@ public class AlgorithmDataLoger {
 		profitLossData.setId(UUID.randomUUID().toString());
 		profitLossData.setInstrumentToken(instrumentToken);
 		profitLossData.setTotalProfitLoss(totalProfitLoss);
-		logger.info(profitLossData.toString());
+		logger.info("Instrument Token: "+instrumentToken+" Total Profit: "+profitLossData.toString());
 		profitLossRepository.saveUpdate(profitLossData);
 	}
 
