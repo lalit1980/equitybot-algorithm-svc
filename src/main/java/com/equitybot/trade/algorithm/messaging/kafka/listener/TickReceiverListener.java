@@ -29,7 +29,7 @@ public class TickReceiverListener {
 		Gson gson = new Gson();
 		Tick unitData = gson.fromJson(record.value().toString(), Tick.class);
 		logger.info("ID9 received: "+unitData.toString());
-		processRequest(unitData);
+	//	processRequest(unitData);
 	}
 
 	@KafkaListener( topicPartitions = {
@@ -38,7 +38,7 @@ public class TickReceiverListener {
 		Gson gson = new Gson();
 		Tick unitData = gson.fromJson(record.value().toString(), Tick.class);
 		logger.info("ID0 received: "+unitData.toString());
-		processRequest(unitData);
+		//processRequest(unitData);
 	}
 
 	@KafkaListener(topicPartitions = {
@@ -47,12 +47,12 @@ public class TickReceiverListener {
 		Gson gson = new Gson();
 		Tick unitData = gson.fromJson(record.value().toString(), Tick.class);
 		logger.info("ID0 received: "+unitData.toString());
-		processRequest(unitData);
+		//processRequest(unitData);
 	}
 
-	private void processRequest(Tick unitData) {
+	/*private void processRequest(Tick unitData) {
 		validateSuperTrend.stopLoss(Decimal.valueOf(unitData.getLastTradedPrice()), unitData.getInstrumentToken());
 
-	}
+	}*/
 
 }

@@ -52,3 +52,6 @@ supertrend:
   smaSize: 7
   csvPath: /Users/lalitsingh/data/csv/
   maxBarCount: 20
+selector:
+  max-instrument-price-per-stock: 100
+  max-total-price: 8000

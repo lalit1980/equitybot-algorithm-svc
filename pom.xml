@@ -198,6 +198,13 @@
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/org.apache.ignite/ignite-zookeeper -->
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
 		<dependency>
 			<groupId>org.apache.ignite</groupId>
 			<artifactId>ignite-zookeeper</artifactId>

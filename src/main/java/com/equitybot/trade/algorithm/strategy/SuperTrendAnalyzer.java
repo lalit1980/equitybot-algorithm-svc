@@ -1,6 +1,7 @@
 package com.equitybot.trade.algorithm.strategy;
 
 import com.equitybot.trade.algorithm.constants.Constant;
+import com.equitybot.trade.algorithm.selector.InstrumentSelector;
 import com.equitybot.trade.bo.NormalTradeOrderRequestBO;
 import com.google.gson.Gson;
 import com.zerodhatech.kiteconnect.utils.Constants;
@@ -16,8 +17,10 @@ import org.springframework.util.concurrent.ListenableFutureCallback;
 import org.ta4j.core.Bar;
 import org.ta4j.core.Decimal;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 public class SuperTrendAnalyzer extends BaseIndicator {
 
@@ -26,23 +29,25 @@ public class SuperTrendAnalyzer extends BaseIndicator {
 	private String orderProcessProducerTopic;
 	@Autowired
 	private KafkaTemplate<String, String> kafkaTemplate;
-	
-	
+    private long instrument;
     private int bandSize;
     private final int smaSize;
-    private long instrument;
     private boolean isInit;
     private List<Decimal> initTrueRangeList;
     private Bar previousBar;
     private Decimal previousFUB;
     private Decimal previousFLB;
     private Decimal previousEMA;
+
     private boolean havebuy;
     private Bar lastBuyBar;
     private Decimal totalProfitLoss;
     private AlgorithmDataLoger algorithmDataLoger;
+    private static Map<Long,Decimal> profitPool = new HashMap<>();
+    InstrumentSelector instrumentSelector;
 
-    public SuperTrendAnalyzer(int bandSize, int smaSize, long instrument, AlgorithmDataLoger algorithmDataLoger) {
+    public SuperTrendAnalyzer(int bandSize, int smaSize, long instrument, AlgorithmDataLoger algorithmDataLoger,
+                              InstrumentSelector instrumentSelector) {
         this.bandSize = bandSize;
         this.smaSize = smaSize;
         this.instrument = instrument;
@@ -54,6 +59,7 @@ public class SuperTrendAnalyzer extends BaseIndicator {
         this.havebuy = false;
         this.totalProfitLoss = Decimal.ZERO;
         this.algorithmDataLoger = algorithmDataLoger;
+        this.instrumentSelector = instrumentSelector;
     }
 
     public Decimal analysis(Bar workingBar) {
@@ -124,7 +130,8 @@ public class SuperTrendAnalyzer extends BaseIndicator {
                     workingBUB, workingBLB, workingFUB, workingFLB, workingSuperTrend, buySell, currentProfitLoss,
                     this.totalProfitLoss,"SuperTrend");
             this.algorithmDataLoger.logProfitLossRepository(this.getInstrument(), this.totalProfitLoss.doubleValue());
-            
+            profitPool.put(this.getInstrument(), this.totalProfitLoss);
+            instrumentSelector.eligibleInstrument(this.getInstrument(),workingBar.getClosePrice().doubleValue());
             this.havebuy = false;
 
         } else if (buySell != null && !this.havebuy && Constant.BUY.equals(buySell)) {
@@ -157,7 +164,7 @@ public class SuperTrendAnalyzer extends BaseIndicator {
         return this.instrument;
     }
     
-    public void stopLoss(Decimal closePrice) {
+    /*public void stopLoss(Decimal closePrice) {
     	
         if (this.havebuy && this.lastBuyBar.getClosePrice().minus(closePrice)
         		.isGreaterThanOrEqual(this.lastBuyBar.getClosePrice().multipliedBy(5).dividedBy(100))) {
@@ -170,6 +177,9 @@ public class SuperTrendAnalyzer extends BaseIndicator {
              this.havebuy = false;
         }
     	
-    }
+    }*/
 
+    public static Map<Long, Decimal> getProfitPool() {
+        return profitPool;
+    }
 }

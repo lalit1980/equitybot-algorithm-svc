@@ -9,7 +9,7 @@ import org.ta4j.core.Decimal;
 
 import com.equitybot.trade.algorithm.constants.Constant;
 
-public abstract class BaseIndicator {
+public class BaseIndicator {
 	
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private Decimal smoothingConstant;

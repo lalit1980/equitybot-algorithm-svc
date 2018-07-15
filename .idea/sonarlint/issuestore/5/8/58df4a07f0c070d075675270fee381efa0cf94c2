@@ -1,0 +1,11 @@
+
+´%squid:RedundantThrowsDeclarationCheck-"wRemove the declaration of thrown exception 'java.lang.InterruptedException', as it cannot be thrown from method's body.(ÂÿËêşÿÿÿÿ8©Í½ÎÉ,
+squid:UselessImportCheck"sRemove this unused import 'org.apache.ignite.spi.discovery.tcp.ipfinder.kubernetes.TcpDiscoveryKubernetesIpFinder'.(¡÷Âo8©Í½ÎÉ,
+rsquid:UselessImportCheck"GRemove this unused import 'org.apache.ignite.cache.CacheAtomicityMode'.(á„Ãò8©Í½ÎÉ,
+Usquid:S26291"7Use the built-in formatting to construct this argument.(¶†Î8©Í½ÎÉ,
+wsquid:UselessImportCheck
+"GRemove this unused import 'org.apache.ignite.cache.CacheRebalanceMode'.(ôè‚ÿÿÿÿÿ8©Í½ÎÉ,
+_squid:S34571"AFormat specifiers should be used instead of string concatenation.(¶†Î8©Í½ÎÉ,
+{squid:UselessImportCheck"PRemove this unused import 'org.apache.ignite.spi.discovery.tcp.TcpDiscoverySpi'.(Ñ÷¤™8©Í½ÎÉ,
+isquid:UselessImportCheck	">Remove this unused import 'org.apache.ignite.cache.CacheMode'.(¼¹¼ù8©Í½ÎÉ,
+|squid:S2293("YReplace the type specification in this constructor call with the diamond operator ("<>").(à‹Äøÿÿÿÿ8©Í½ÎÉ,

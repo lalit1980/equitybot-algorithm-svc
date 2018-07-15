@@ -1,0 +1,5 @@
+
+©%squid:RedundantThrowsDeclarationCheck4"lRemove the declaration of thrown exception 'java.io.IOException', as it cannot be thrown from method's body.(¤Ø¦»ûÿÿÿÿ8©Í½ÎÉ,
+usquid:UselessImportCheck
+"ERemove this unused import 'org.springframework.stereotype.Component'.(Þ÷Ñ¸ÿÿÿÿÿ8©Í½ÎÉ,
+Usquid:S26290"7Use the built-in formatting to construct this argument.(—é®¸8©Í½ÎÉ,

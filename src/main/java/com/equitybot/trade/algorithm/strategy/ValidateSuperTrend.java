@@ -1,6 +1,7 @@
 package com.equitybot.trade.algorithm.strategy;
 
 
+import com.equitybot.trade.algorithm.selector.InstrumentSelector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,10 @@ public class ValidateSuperTrend {
     private int smaSize;
 
     @Autowired
+    private InstrumentSelector instrumentSelector;
+
+
+    @Autowired
     private AlgorithmDataLoger algorithmDataLoger;
 
     static {
@@ -50,18 +55,18 @@ public class ValidateSuperTrend {
     }
 
     private SuperTrendAnalyzer getSuperTrendAnalyzer(final Long instrument) throws IOException {
-        return new SuperTrendAnalyzer(this.bandSize, this.smaSize, instrument, algorithmDataLoger);
+        return new SuperTrendAnalyzer(this.bandSize, this.smaSize, instrument, algorithmDataLoger,instrumentSelector);
     }
 
     public static void clearSuperTrendAnalyzerMap(){
         ValidateSuperTrend.superTrendAnalyzerMap = new HashMap<>();
     }
     
-    public void stopLoss( Decimal closePrice, Long instrument) {
+    /*public void stopLoss( Decimal closePrice, Long instrument) {
             SuperTrendAnalyzer superTrendAnalyzer = ValidateSuperTrend.superTrendAnalyzerMap.get(instrument);
             if (superTrendAnalyzer != null) {
             	superTrendAnalyzer.stopLoss(closePrice);
             }
-    }
+    }*/
 
 }
