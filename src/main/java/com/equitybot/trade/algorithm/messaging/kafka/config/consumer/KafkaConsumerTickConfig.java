@@ -16,14 +16,15 @@ import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.listener.ConcurrentMessageListenerContainer;
 
+import com.equitybot.trade.algorithm.messaging.kafka.listener.TickReceiverListener;
 import com.equitybot.trade.algorithm.messaging.kafka.listener.TimeSeriesReceiverListener;
 
 @EnableKafka
 @Configuration
-public class KafkaConsumerTimeSeriesConfig {
+public class KafkaConsumerTickConfig {
 	 	@Value("${spring.kafka.bootstrap-servers}")
 	    private String bootstrapServers;
-	 	
+
 		@Value("${spring.kafka.consumer.auto-offset-reset}")
 		private String earliest;
 	 	
@@ -51,12 +52,12 @@ public class KafkaConsumerTimeSeriesConfig {
 			propsMap.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
 			propsMap.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
 			propsMap.put(ConsumerConfig.GROUP_ID_CONFIG, UUID.randomUUID().toString());
-			propsMap.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, earliest);
+			propsMap.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
 			return propsMap;
 		}
 
 		@Bean
-		public TimeSeriesReceiverListener listener() {
-			return new TimeSeriesReceiverListener();
+		public TickReceiverListener listener() {
+			return new TickReceiverListener();
 		}
 }

@@ -13,12 +13,16 @@ import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
 
+import com.equitybot.trade.algorithm.strategy.SuperTrendAnalyzer;
+import com.equitybot.trade.algorithm.strategy.ValidateSuperTrend;
+
 @Configuration
 @EnableKafka
 public class KafkaProducerConfig {
 	
 	@Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapServers;
+	
 	@Bean
 	public ProducerFactory<String, String> producerFactory() {
 		return new DefaultKafkaProducerFactory<>(producerConfigs());
@@ -41,4 +45,6 @@ public class KafkaProducerConfig {
 	public KafkaTemplate<String, String> kafkaTemplate() {
 		return new KafkaTemplate<String, String>(producerFactory());
 	}
+	
+	
 }

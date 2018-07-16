@@ -27,10 +27,6 @@ spring:
       auto-offset-reset: earliest
       from: 
         beginning: true
-        groupid: group-id-series-07
-      groupid-seriesupdate: group-id-series-05
-      groupid_tick: group-id-tick-06
-      groupid_tradeorder: groupid_tradeorder-01
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       topic-data-seriesupdate: topic-data-seriesupdate
       topic-kite-tick: topic-kite-tick

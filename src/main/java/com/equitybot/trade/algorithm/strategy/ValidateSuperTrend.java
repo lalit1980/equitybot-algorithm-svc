@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.ta4j.core.TimeSeries;
 
@@ -21,12 +22,23 @@ import com.equitybot.trade.algorithm.selector.InstrumentSelector;
 public class ValidateSuperTrend {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
-    private static Map<Long, SuperTrendAnalyzer> superTrendAnalyzerMap;
+    
+    public static Map<Long, SuperTrendAnalyzer> superTrendAnalyzerMap;
+    
     @Value("${supertrend.bandSize}")
     private int bandSize;
     @Value("${supertrend.smaSize}")
     private int smaSize;
-
+    
+    @Value("${spring.kafka.producer.topic-kite-tradeorder}")
+	private String orderProcessProducerTopic;
+    
+    @Value("${selector.order-quantity}")
+	private int orderQuantity;
+    
+    @Autowired
+	private KafkaTemplate<String, String> kafkaTemplate;
+    
     @Autowired
     private InstrumentSelector instrumentSelector;
 
@@ -41,10 +53,14 @@ public class ValidateSuperTrend {
     public void evaluate(TimeSeries timeSeries) throws IOException {
         if (timeSeries != null && !timeSeries.getBarData().isEmpty()) {
             SuperTrendAnalyzer superTrendAnalyzer = ValidateSuperTrend.superTrendAnalyzerMap.get(Long.parseLong(timeSeries.getName()));
+            
             if (superTrendAnalyzer == null) {
                 superTrendAnalyzer = getSuperTrendAnalyzer(Long.parseLong(timeSeries.getName()));
                 ValidateSuperTrend.superTrendAnalyzerMap.put(Long.parseLong(timeSeries.getName()), superTrendAnalyzer);
             }
+            superTrendAnalyzer.setOrderProcessProducerTopic(orderProcessProducerTopic);
+            superTrendAnalyzer.setOrderQuantity(orderQuantity);
+            superTrendAnalyzer.setKafkaTemplate(kafkaTemplate);
             superTrendAnalyzer.analysis(timeSeries.getBarData().get(timeSeries.getBarData().size() - 1));
            // logger.info(" * Super Trend evaluate for instrument {}" , timeSeries.getName());
         } else {

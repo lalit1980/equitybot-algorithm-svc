@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
+import org.springframework.stereotype.Service;
 import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.util.concurrent.ListenableFutureCallback;
 import org.ta4j.core.Bar;
@@ -23,19 +24,17 @@ import com.equitybot.trade.algorithm.ignite.configs.IgniteConfig;
 import com.equitybot.trade.algorithm.selector.InstrumentSelector;
 import com.equitybot.trade.bo.OrderRequestDTO;
 import com.google.gson.Gson;
+import com.zerodhatech.kiteconnect.KiteConnect;
 import com.zerodhatech.kiteconnect.utils.Constants;
 
 public class SuperTrendAnalyzer extends BaseIndicator {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     
-    @Value("${spring.kafka.producer.topic-kite-tradeorder}")
 	private String orderProcessProducerTopic;
     
-    @Value("${selector.order-quantity}")
 	private int orderQuantity;
     
-	@Autowired
 	private KafkaTemplate<String, String> kafkaTemplate;
 	
     private long instrument;
@@ -55,6 +54,7 @@ public class SuperTrendAnalyzer extends BaseIndicator {
     private static Map<Long,Decimal> profitPool = new HashMap<>();
     InstrumentSelector instrumentSelector;
     private IgniteCache<Long, String> cacheTradeOrder;
+
 
     @Autowired
     IgniteConfig igniteConfig;
@@ -134,7 +134,7 @@ public class SuperTrendAnalyzer extends BaseIndicator {
 
     public void analyze(Bar workingBar, Decimal workingTrueRange, Decimal workingEMA, Decimal workingBUB,
                         Decimal workingBLB, Decimal workingFUB, Decimal workingFLB, Decimal workingSuperTrend, String buySell) {
-
+    	logger.info("&&&&&&&&&&&&&&&&&&&&&&: "+kafkaTemplate.getDefaultTopic());
         algorithmDataLoger.logData(workingBar, this.getInstrument(), workingTrueRange, workingEMA, workingBUB,workingBLB, workingFUB, workingFLB, workingSuperTrend, buySell);
         if (buySell != null && this.havebuy && Constant.SELL.equals(buySell)) {
             Decimal currentProfitLoss = workingBar.getClosePrice().minus(this.lastBuyBar.getClosePrice());
@@ -151,6 +151,7 @@ public class SuperTrendAnalyzer extends BaseIndicator {
                 orderBo.setTransactionType(Constants.TRANSACTION_TYPE_SELL);
                 orderBo.setQuantity(orderQuantity);
                 orderBo.setTag("Lalit");
+                orderBo.setUserId("WU6870");
                 String newJson = new Gson().toJson(orderBo);
                 ListenableFuture<SendResult<String, String>> future = kafkaTemplate.send(orderProcessProducerTopic,newJson);
         		future.addCallback(new ListenableFutureCallback<SendResult<String, String>>() {
@@ -182,10 +183,10 @@ public class SuperTrendAnalyzer extends BaseIndicator {
                 orderBo.setTransactionType(Constants.TRANSACTION_TYPE_SELL);
                 orderBo.setQuantity(orderQuantity);
                 orderBo.setTag("Lalit");
+                orderBo.setUserId("WU6870");
                 String newJson = new Gson().toJson(orderBo);
-                String topicName="topic-kite-tradeorder";
                 logger.info( "Buy Order inside Topic Name: "+orderProcessProducerTopic);
-                ListenableFuture<SendResult<String, String>> future = kafkaTemplate.send(topicName,newJson);
+                ListenableFuture<SendResult<String, String>> future = kafkaTemplate.send(orderProcessProducerTopic,newJson);
         		future.addCallback(new ListenableFutureCallback<SendResult<String, String>>() {
         			@Override
         			public void onSuccess(SendResult<String, String> result) {
@@ -232,4 +233,26 @@ public class SuperTrendAnalyzer extends BaseIndicator {
 	public void setCacheTradeOrder(IgniteCache<Long, String> cacheTradeOrder) {
 		this.cacheTradeOrder = cacheTradeOrder;
 	}
+
+	public String getOrderProcessProducerTopic() {
+		return orderProcessProducerTopic;
+	}
+
+	public void setOrderProcessProducerTopic(String orderProcessProducerTopic) {
+		this.orderProcessProducerTopic = orderProcessProducerTopic;
+	}
+
+	public void setKafkaTemplate(KafkaTemplate<String, String> kafkaTemplate) {
+		this.kafkaTemplate = kafkaTemplate;
+	}
+
+	public int getOrderQuantity() {
+		return orderQuantity;
+	}
+
+	public void setOrderQuantity(int orderQuantity) {
+		this.orderQuantity = orderQuantity;
+	}
+
+	
 }
