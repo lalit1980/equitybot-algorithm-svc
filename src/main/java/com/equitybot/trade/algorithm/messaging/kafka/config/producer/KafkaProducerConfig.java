@@ -13,9 +13,6 @@ import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
 
-import com.equitybot.trade.algorithm.strategy.SuperTrendAnalyzer;
-import com.equitybot.trade.algorithm.strategy.ValidateSuperTrend;
-
 @Configuration
 @EnableKafka
 public class KafkaProducerConfig {

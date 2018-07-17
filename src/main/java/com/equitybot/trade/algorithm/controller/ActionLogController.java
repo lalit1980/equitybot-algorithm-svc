@@ -2,7 +2,7 @@ package com.equitybot.trade.algorithm.controller;
 
 import java.util.List;
 
-import com.equitybot.trade.algorithm.strategy.ValidateSuperTrend;
+import com.equitybot.trade.algorithm.util.Pool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,7 +18,9 @@ import com.equitybot.trade.algorithm.mongodb.repository.ActionLogDataRepository;
 public class ActionLogController {
 	@Autowired
 	ActionLogDataRepository actionRepository;
-	
+
+	@Autowired
+	private Pool pool;
 
 	@DeleteMapping({ "/actionlog/v1.0" })
 	public void delete() {
@@ -37,9 +39,9 @@ public class ActionLogController {
 		return actionRepository.findByInstrumentToken(instrumentToken);
 	}
 
-	@GetMapping("/actionlog/clearcache/v1.0")
+	@GetMapping("/actionlog/clearpool/v1.0")
 	public void clearSuperTrendcache() {
 
-		ValidateSuperTrend.clearSuperTrendAnalyzerMap();
+		this.pool.cleanPool();
 	}
 }

@@ -1,4 +1,4 @@
-package com.equitybot.trade.bo;
+package com.equitybot.trade.algorithm.model;
 
 import java.io.Serializable;
 import java.util.Date;
