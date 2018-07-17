@@ -11,7 +11,7 @@
 selector: 
   max-instrument-price-per-stock: 1000
   max-total-price: 800000
-  order-quantity: 400
+  order-quantity: 80
 server: 
   address: "127.0.0.1"
   port: 9012

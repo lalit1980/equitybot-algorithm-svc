@@ -180,7 +180,7 @@ public class SuperTrendAnalyzer extends BaseIndicator {
             if(!this.cacheTradeOrder.containsKey(this.getInstrument())) {
             	OrderRequestDTO orderBo=new OrderRequestDTO();
                 orderBo.setInstrumentToken(this.getInstrument());
-                orderBo.setTransactionType(Constants.TRANSACTION_TYPE_SELL);
+                orderBo.setTransactionType(Constants.TRANSACTION_TYPE_BUY);
                 orderBo.setQuantity(orderQuantity);
                 orderBo.setTag("Lalit");
                 orderBo.setUserId("WU6870");
