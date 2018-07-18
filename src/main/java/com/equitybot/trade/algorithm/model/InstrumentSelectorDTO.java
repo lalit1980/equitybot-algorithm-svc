@@ -8,8 +8,17 @@ public class InstrumentSelectorDTO implements Serializable {
     private double instrumentProfit;
     private double instrumentClosePrice;
     private double totalStockSize;
-    private Long expectedQuantity;
+    private long expectedQuantity;
     private double averageBuyPrice;
+
+    public InstrumentSelectorDTO() {
+        this.eligibleInstrument = false;
+        this.instrumentProfit = 0.0;
+        this.instrumentClosePrice = 0.0;
+        this.totalStockSize = 0.0;
+        this.expectedQuantity = 0;
+        this.averageBuyPrice = 0.0;
+    }
 
     public boolean isEligibleInstrument() {
         return eligibleInstrument;

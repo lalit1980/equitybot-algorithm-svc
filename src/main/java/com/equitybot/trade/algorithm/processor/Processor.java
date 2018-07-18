@@ -71,8 +71,11 @@ public class Processor {
             InstrumentSelectorDTO instrumentSelectorDTO = this.instrumentSelector.eligibleInstrument(superTrendAnalyzer
                             .getSuperTradeIndicator().getInstrument(), superTrendAnalyzer.getSuperTradeIndicator()
                     .getBar().getClosePrice().doubleValue());
-            this.orderPublisher.publishBuyOrder(superTrendAnalyzer.getSuperTradeIndicator().getInstrument(),
-                    instrumentSelectorDTO.getExpectedQuantity().intValue(),instrumentSelectorDTO);
+            logger.info(instrumentSelectorDTO.toString());
+            if(instrumentSelectorDTO.getInstrumentProfit()>0) {
+                this.orderPublisher.publishBuyOrder(superTrendAnalyzer.getSuperTradeIndicator().getInstrument(),
+                        instrumentSelectorDTO.getExpectedQuantity().intValue(), instrumentSelectorDTO);
+            }
         }
     }
 

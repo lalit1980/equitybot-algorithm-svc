@@ -11,6 +11,8 @@ import org.springframework.stereotype.Component;
 import org.ta4j.core.Decimal;
 
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.Set;
 
 @Component
 public class InstrumentSelector {
@@ -68,13 +70,17 @@ public class InstrumentSelector {
     private boolean feasibleSellerAvailability(Long instrument, double expectedPrice,InstrumentSelectorDTO instrumentSelectorDTO) {
         Tick instrumentTick = this.cache.getCacheLatestTick().get(instrument);
 
-        if (instrumentTick != null && instrumentTick.getMarketDepth() != null && instrumentTick.getMarketDepth().get("Sell") != null &&
-                !instrumentTick.getMarketDepth().get("Sell").isEmpty()) {
-
+        if (instrumentTick != null && instrumentTick.getMarketDepth() != null) {
+            ArrayList<Depth> instrumentDepth=null;
+            for ( Map.Entry< String, ArrayList<Depth>>  depths : instrumentTick.getMarketDepth().entrySet()) {
+                if("sell".equalsIgnoreCase(depths.getKey())){
+                   instrumentDepth = depths.getValue();
+                }
+            }
+            if(instrumentDepth != null && !instrumentDepth.isEmpty()){
             double instrumentPrice = instrumentTick.getClosePrice();
             Long quantity = Math.round(maxTotalPriceLimit / instrumentPrice);
             Long expectedQuantity = quantity;
-            ArrayList<Depth> instrumentDepth = instrumentTick.getMarketDepth().get("Sell");
             double totalStockSize = 0;
             double totalPrice = 0;
 
@@ -100,6 +106,7 @@ public class InstrumentSelector {
             } else {
                 logger.debug(" instrument ID {} : available quantity {} : requiredQuantity {} : expectedPrice {} : averageBuyPrice {} ", instrument, totalStockSize, expectedQuantity, expectedPrice, averageBuyPrice);
             }
+        }
         } else {
             logger.debug(" instrument ID {} : not available in cacheLatestTick or Depth is zero", instrument);
         }
