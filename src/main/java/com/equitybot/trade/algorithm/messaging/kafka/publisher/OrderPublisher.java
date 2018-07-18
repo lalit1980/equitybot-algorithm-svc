@@ -27,6 +27,9 @@ public class OrderPublisher {
 
     @Value("${spring.kafka.producer.topic-kite-tradeorder}")
     private String orderProcessProducerTopic;
+    
+    @Value("${supertrend.userid}")
+    private String userid;
 
     public void publishSellOrder(long instrument) {
         publish(instrument, 0, Constants.TRANSACTION_TYPE_SELL, null);
@@ -41,9 +44,9 @@ public class OrderPublisher {
         orderBo.setInstrumentSelectorDTO(instrumentSelectorDTO);
         orderBo.setInstrumentToken(instrument);
         orderBo.setTransactionType(orderType);
-        orderBo.setQuantity(120);
+        orderBo.setQuantity(80);
         orderBo.setTag("Lalit");
-        orderBo.setUserId("WU6870");
+        orderBo.setUserId(userid);
         String newJson = new Gson().toJson(orderBo);
         ListenableFuture<SendResult<String, String>> future = this.kafkaTemplate.send(orderProcessProducerTopic, newJson);
         future.addCallback(new ListenableFutureCallback<SendResult<String, String>>() {

@@ -47,5 +47,6 @@ tick:
 supertrend:
   bandSize: 3
   smaSize: 7
+  userid: WU6870
   csvPath: /data/logs
   maxBarCount: 20
