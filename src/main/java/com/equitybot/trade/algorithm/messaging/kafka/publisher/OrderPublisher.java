@@ -41,9 +41,9 @@ public class OrderPublisher {
         orderBo.setInstrumentSelectorDTO(instrumentSelectorDTO);
         orderBo.setInstrumentToken(instrument);
         orderBo.setTransactionType(orderType);
-        orderBo.setQuantity(orderQuantity);
-        //orderBo.setTag("Lalit");
-        //orderBo.setUserId("WU6870");
+        orderBo.setQuantity(120);
+        orderBo.setTag("Lalit");
+        orderBo.setUserId("WU6870");
         String newJson = new Gson().toJson(orderBo);
         ListenableFuture<SendResult<String, String>> future = this.kafkaTemplate.send(orderProcessProducerTopic, newJson);
         future.addCallback(new ListenableFutureCallback<SendResult<String, String>>() {
