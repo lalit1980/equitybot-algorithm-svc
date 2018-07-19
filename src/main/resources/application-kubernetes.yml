@@ -8,45 +8,44 @@
 ### Java properties file format.
 
 
-spring:
-  kafka:
-    bootstrap-servers: ${KAFKASERVERS}
-    consumer:
-      zerodha-order-consume-topic: ${ALGOSERIESUPDATETOPIC}
-      groupid: ${SERIESGROUPID}
-      auto-offset-reset: earliest
-      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      from:
-        beginning: true
-        groupid: ${SERIESGROUPID}
-    producer:
-      key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.apache.kafka.common.serialization.StringSerializer
-      topic: ${ALGOSERIESUPDATETOPIC}
-      topic-totalProfit: ${ALGOSERIESTOALPROFITTOPIC}
-
-
-  profiles: kubernetes
-
-  data:
-    mongodb:
-      host: mongo
-      port: 27017
-      database: ${MONGODBDATABASE}
-
+selector:
+  max-instrument-price-per-stock: 1000
+  max-total-price: 800000
+  order-quantity: 80
 server:
   address: 0.0.0.0
   port: 9012
-
-tick:
-  file:
-    Serializer: /data/logs
-  barsize: 60
-  maxserializetick: 1024
+spring:
+  data:
+    mongodb:
+      database: ${MONGODBDATABASE}
+      host: mongo
+      port: 27017
+  kafka:
+    bootstrap-servers: ${KAFKASERVERS}
+    consumer:
+      auto-offset-reset: latest
+      from:
+        beginning: true
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      topic-data-seriesupdate: ${ALGOSERIESUPDATETOPIC}
+      topic-kite-tick: ${ALGOTICKTOPIC}
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      topic-data-seriesupdate: ${ALGOSERIESUPDATETOPIC}
+      topic-kite-tick: ${ALGOTICKTOPIC}
+      topic-kite-tradeorder: ${ALGOTRADEORDERTOPIC}
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+  profiles: kubernetes
 supertrend:
   bandSize: 3
-  smaSize: 7
-  userid: WU6870
   csvPath: /data/logs
   maxBarCount: 20
+  smaSize: 7
+  userid: ${USERID}
+tick:
+  barsize: 60
+  file:
+    Serializer: /data/logs
+  maxserializetick: 1024
