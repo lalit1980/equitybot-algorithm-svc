@@ -72,7 +72,7 @@ public class Processor {
                             .getSuperTradeIndicator().getInstrument(), superTrendAnalyzer.getSuperTradeIndicator()
                     .getBar().getClosePrice().doubleValue());
             logger.info(instrumentSelectorDTO.toString());
-            if(instrumentSelectorDTO.getInstrumentProfit()>0) {
+            if(instrumentSelectorDTO.getInstrumentProfit()>=0) {
                 this.orderPublisher.publishBuyOrder(superTrendAnalyzer.getSuperTradeIndicator().getInstrument(),
                         instrumentSelectorDTO.getExpectedQuantity().intValue(), instrumentSelectorDTO);
             }
