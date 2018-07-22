@@ -37,6 +37,7 @@ spring:
       topic-kite-tick: topic-kite-tick
       topic-kite-tradeorder: topic-kite-tradeorder
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      topic-kite-bar: topic-kite-bar
   profiles: dev
 supertrend: 
   bandSize: 3

@@ -19,9 +19,8 @@ public class Starter {
 	
 	public static void main(String[] args){
 		SpringApplication.run(Starter.class, args);
-		
-		
 	}
+
 	@Bean
 	public Docket swaggerActionLogApi10() {
 		return new Docket(DocumentationType.SWAGGER_2)

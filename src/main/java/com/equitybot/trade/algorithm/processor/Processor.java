@@ -50,7 +50,7 @@ public class Processor {
         }
     }
 
-    private void process(Bar bar, Long instrument){
+    public void process(Bar bar, Long instrument){
         SuperTrendAnalyzer superTrendAnalyzer = this.superTrendStrategy.build(bar, instrument);
         publishOrder(superTrendAnalyzer);
     }
