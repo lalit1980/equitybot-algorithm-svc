@@ -31,21 +31,22 @@ public class OrderPublisher {
     @Value("${supertrend.userid}")
     private String userid;
 
-    public void publishSellOrder(long instrument) {
-        publish(instrument, 0, Constants.TRANSACTION_TYPE_SELL, null);
+    public void publishSellOrder(double closePrice,long instrument) {
+        publish(closePrice,instrument, 0, Constants.TRANSACTION_TYPE_SELL, null);
     }
 
-    public void publishBuyOrder(long instrument, int orderQuantity, InstrumentSelectorDTO instrumentSelectorDTO) {
-        publish(instrument, orderQuantity, Constants.TRANSACTION_TYPE_BUY, instrumentSelectorDTO);
+    public void publishBuyOrder(double closePrice,long instrument, int orderQuantity, InstrumentSelectorDTO instrumentSelectorDTO) {
+        publish(closePrice,instrument, orderQuantity, Constants.TRANSACTION_TYPE_BUY, instrumentSelectorDTO);
     }
 
-    private void publish(long instrument, int orderQuantity, String orderType, InstrumentSelectorDTO instrumentSelectorDTO) {
+    private void publish(double closePrice,long instrument, int orderQuantity, String orderType, InstrumentSelectorDTO instrumentSelectorDTO) {
         OrderRequestDTO orderBo = new OrderRequestDTO();
+        orderBo.setPrice(closePrice);
         orderBo.setInstrumentSelectorDTO(instrumentSelectorDTO);
         orderBo.setInstrumentToken(instrument);
         orderBo.setTransactionType(orderType);
         orderBo.setQuantity(80);
-        orderBo.setTag("Lalit");
+        orderBo.setTag("SuperTR");
         orderBo.setUserId(userid);
         String newJson = new Gson().toJson(orderBo);
         ListenableFuture<SendResult<String, String>> future = this.kafkaTemplate.send(orderProcessProducerTopic, newJson);
