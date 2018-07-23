@@ -43,7 +43,7 @@ supertrend:
   csvPath: /Users/lalitsingh/data/csv/
   maxBarCount: 20
   smaSize: 7
-  userid: XS2241
+  userid: WU6870
 tick: 
   barsize: 60
   file: 
