@@ -1,6 +1,7 @@
 package com.equitybot.trade.algorithm.strategy;
 
 import com.equitybot.trade.algorithm.indicator.SuperTrendAnalyzer;
+import com.equitybot.trade.algorithm.util.Cache;
 import com.equitybot.trade.algorithm.util.DBLogger;
 import com.equitybot.trade.algorithm.util.Pool;
 import org.slf4j.Logger;
@@ -31,6 +32,9 @@ public class SuperTrendStrategy {
 
     @Autowired
     private Pool pool;
+    
+    @Autowired
+    private Cache cache;
 
 
     public SuperTrendAnalyzer build(Bar bar, Long instrument) {
@@ -60,13 +64,12 @@ public class SuperTrendStrategy {
     }
 
     private void buy(SuperTrendAnalyzer superTrendAnalyzer) {
-        this.DBLogger.logSuperTrendAllProfitLossData(superTrendAnalyzer, "SuperTrend");
+    		this.DBLogger.logSuperTrendAllProfitLossData(superTrendAnalyzer, "SuperTrend");
     }
 
     private void sell(SuperTrendAnalyzer superTrendAnalyzer) {
-        this.DBLogger.logSuperTrendAllProfitLossData(superTrendAnalyzer, "SuperTrend");
-        this.DBLogger.logSuperTrendProfitLoss(superTrendAnalyzer);
-
+    		this.DBLogger.logSuperTrendAllProfitLossData(superTrendAnalyzer, "SuperTrend");
+    		this.DBLogger.logSuperTrendProfitLoss(superTrendAnalyzer);
     }
 
     private SuperTrendAnalyzer getSuperTrendAnalyzer(final Long instrument) {

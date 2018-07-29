@@ -29,12 +29,10 @@ spring:
         beginning: true
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       topic-data-seriesupdate: topic-data-seriesupdate
-      topic-kite-tick: topic-kite-tick
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
     producer: 
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       topic-data-seriesupdate: topic-data-seriesupdate
-      topic-kite-tick: topic-kite-tick
       topic-kite-tradeorder: topic-kite-tradeorder
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
   profiles: dev

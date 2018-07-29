@@ -25,7 +25,8 @@ public class DBLogger {
     private ActionLogDataRepository actionRepo;
     @Autowired
     private ProfitLossRepository profitLossRepository;
-
+    @Autowired
+    private Cache cache;
 
     public void logSuperTrendData(SuperTrendAnalyzer superTrendAnalyzer) {
         logger.info(superTrendAnalyzer.toString());
@@ -63,11 +64,11 @@ public class DBLogger {
     }
 
     public void logSuperTrendProfitLoss(SuperTrendAnalyzer superTrendAnalyzer) {
-
         ProfitLossData profitLossData = new ProfitLossData();
         profitLossData.setId(UUID.randomUUID().toString());
         profitLossData.setInstrumentToken(superTrendAnalyzer.getSuperTradeIndicator().getInstrument());
         profitLossData.setTotalProfitLoss(superTrendAnalyzer.getTotalProfitLoss().doubleValue());
+        cache.getCacheTotalProfit().put(superTrendAnalyzer.getSuperTradeIndicator().getInstrument(), superTrendAnalyzer.getTotalProfitLoss().doubleValue());
         logger.info("Instrument Token: {} :Total Profit: {} :", superTrendAnalyzer.getSuperTradeIndicator().getInstrument(), profitLossData.toString());
         profitLossRepository.saveUpdate(profitLossData);
     }

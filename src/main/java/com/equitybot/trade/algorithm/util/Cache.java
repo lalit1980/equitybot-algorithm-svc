@@ -25,21 +25,28 @@ public class Cache {
     private IgniteCache<String, TimeSeries> timeSeries;
 
     private IgniteCache<Long, Tick> cacheLatestTick;
+    private IgniteCache<Long, Double> cacheTotalProfit;
+    private IgniteCache<Long, Boolean> cacheTrailStopLossFlag;
 
 
 
     public Cache(){
         CacheConfiguration<Long, String> ccfgOrderDetails = new CacheConfiguration<Long, String>("CachedTradeOrder");
-       
         this.boughtInstruments = igniteConfig.getInstance().getOrCreateCache(ccfgOrderDetails);
 
         CacheConfiguration<String, TimeSeries> ccfg = new CacheConfiguration<String, TimeSeries>("TimeSeriesCache");
-      
         this.timeSeries = igniteConfig.getInstance().getOrCreateCache(ccfg);
 
-        CacheConfiguration<Long, Tick> ccfgLatestTickParams = new CacheConfiguration<>("CachedLatestTick");
-       
+        CacheConfiguration<Long, Tick> ccfgLatestTickParams = new CacheConfiguration<Long, Tick>("CachedLatestTick");
         this.cacheLatestTick = igniteConfig.getInstance().getOrCreateCache(ccfgLatestTickParams);
+        
+        CacheConfiguration<Long, Double> ccfgcacheTotalProfit = new CacheConfiguration<Long, Double>("CacheTotalProfit");
+        this.cacheTotalProfit = igniteConfig.getInstance().getOrCreateCache(ccfgcacheTotalProfit);
+        
+        CacheConfiguration<Long, Boolean> ccfgcacheTrailStopLossFlag = new CacheConfiguration<Long, Boolean>("CacheTrailStopLossFlag");
+        this.cacheTrailStopLossFlag = igniteConfig.getInstance().getOrCreateCache(ccfgcacheTrailStopLossFlag);
+        
+       
     }
 
     public IgniteCache<Long, String> getBoughtInstruments() {
@@ -53,4 +60,13 @@ public class Cache {
     public IgniteCache<Long, Tick> getCacheLatestTick() {
         return cacheLatestTick;
     }
+
+	public IgniteCache<Long, Double> getCacheTotalProfit() {
+		return cacheTotalProfit;
+	}
+
+	public IgniteCache<Long, Boolean> getCacheTrailStopLossFlag() {
+		return cacheTrailStopLossFlag;
+	}
+
 }

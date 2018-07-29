@@ -72,9 +72,6 @@ public class Processor {
                             .getSuperTradeIndicator().getInstrument(), superTrendAnalyzer.getSuperTradeIndicator()
                     .getBar().getClosePrice().doubleValue());
             logger.info(instrumentSelectorDTO.toString());
-            
-            logger.info("Lalit Singh ki Tatti instrumentSelectorDTO: "+instrumentSelectorDTO.getAverageBuyPrice()+ " Analyzer: "+ superTrendAnalyzer.getSuperTradeIndicator()
-                    .getBar().getClosePrice().doubleValue() );
             if(instrumentSelectorDTO.getInstrumentProfit()>=0) {
             	
                 this.orderPublisher.publishBuyOrder(superTrendAnalyzer.getSuperTradeIndicator()
@@ -86,7 +83,7 @@ public class Processor {
 
     private void sell(SuperTrendAnalyzer superTrendAnalyzer) {
         if (this.cache.getBoughtInstruments().containsKey(superTrendAnalyzer.getSuperTradeIndicator().getInstrument())) {
-            this.orderPublisher.publishSellOrder(superTrendAnalyzer.getSuperTradeIndicator()
+        	this.orderPublisher.publishSellOrder(superTrendAnalyzer.getSuperTradeIndicator()
                     .getBar().getClosePrice().doubleValue(),superTrendAnalyzer.getSuperTradeIndicator().getInstrument());
         }
     }
