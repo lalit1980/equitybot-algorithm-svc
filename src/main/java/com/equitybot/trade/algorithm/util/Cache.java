@@ -25,6 +25,8 @@ public class Cache {
     private IgniteCache<String, TimeSeries> timeSeries;
 
     private IgniteCache<Long, Tick> cacheLatestTick;
+    private IgniteCache<Long, Double> cacheTotalProfit;
+    private IgniteCache<Long, Boolean> cacheTrailStopLossFlag;
 
 
 
@@ -43,12 +45,30 @@ public class Cache {
         ccfg.setDataRegionName("1GB_Region");
         this.timeSeries = igniteConfig.getInstance().getOrCreateCache(ccfg);
 
+
         CacheConfiguration<Long, Tick> ccfgLatestTickParams = new CacheConfiguration<>("CachedLatestTick");
         ccfgLatestTickParams.setAtomicityMode(CacheAtomicityMode.ATOMIC);
         ccfgLatestTickParams.setCacheMode(CacheMode.PARTITIONED);
         ccfgLatestTickParams.setRebalanceMode(CacheRebalanceMode.NONE);
         ccfgLatestTickParams.setDataRegionName("1GB_Region");
+
         this.cacheLatestTick = igniteConfig.getInstance().getOrCreateCache(ccfgLatestTickParams);
+        
+        CacheConfiguration<Long, Double> ccfgcacheTotalProfit = new CacheConfiguration<Long, Double>("CacheTotalProfit");
+        ccfgcacheTotalProfit.setAtomicityMode(CacheAtomicityMode.ATOMIC);
+        ccfgcacheTotalProfit.setCacheMode(CacheMode.PARTITIONED);
+        ccfgcacheTotalProfit.setRebalanceMode(CacheRebalanceMode.NONE);
+        ccfgcacheTotalProfit.setDataRegionName("1GB_Region");
+        this.cacheTotalProfit = igniteConfig.getInstance().getOrCreateCache(ccfgcacheTotalProfit);
+        
+        CacheConfiguration<Long, Boolean> ccfgcacheTrailStopLossFlag = new CacheConfiguration<Long, Boolean>("CacheTrailStopLossFlag");
+        ccfgcacheTrailStopLossFlag.setAtomicityMode(CacheAtomicityMode.ATOMIC);
+        ccfgcacheTrailStopLossFlag.setCacheMode(CacheMode.PARTITIONED);
+        ccfgcacheTrailStopLossFlag.setRebalanceMode(CacheRebalanceMode.NONE);
+        ccfgcacheTrailStopLossFlag.setDataRegionName("1GB_Region");
+        this.cacheTrailStopLossFlag = igniteConfig.getInstance().getOrCreateCache(ccfgcacheTrailStopLossFlag);
+        
+       
     }
 
     public IgniteCache<Long, String> getBoughtInstruments() {
@@ -62,4 +82,13 @@ public class Cache {
     public IgniteCache<Long, Tick> getCacheLatestTick() {
         return cacheLatestTick;
     }
+
+	public IgniteCache<Long, Double> getCacheTotalProfit() {
+		return cacheTotalProfit;
+	}
+
+	public IgniteCache<Long, Boolean> getCacheTrailStopLossFlag() {
+		return cacheTrailStopLossFlag;
+	}
+
 }

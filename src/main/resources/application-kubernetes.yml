@@ -29,12 +29,10 @@ spring:
         beginning: true
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       topic-data-seriesupdate: ${ALGOSERIESUPDATETOPIC}
-      topic-kite-tick: ${ALGOTICKTOPIC}
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       topic-data-seriesupdate: ${ALGOSERIESUPDATETOPIC}
-      topic-kite-tick: ${ALGOTICKTOPIC}
       topic-kite-tradeorder: ${ALGOTRADEORDERTOPIC}
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
   profiles: kubernetes
