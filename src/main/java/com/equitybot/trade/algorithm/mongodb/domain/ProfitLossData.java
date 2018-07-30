@@ -10,6 +10,7 @@ public class ProfitLossData {
 	private String id;
 	@Indexed(name = "instrumentToken_index")
 	private long instrumentToken;
+	private String tradingSymbol;
 	private double totalProfitLoss;
 	
 	public ProfitLossData() {}
@@ -40,8 +41,16 @@ public class ProfitLossData {
 
 	@Override
 	public String toString() {
-		return "ProfitLossData [id=" + id + ", instrumentToken=" + instrumentToken + ", totalProfitLoss="
-				+ totalProfitLoss + "]";
+		return "ProfitLossData [id=" + id + ", instrumentToken=" + instrumentToken + ", tradingSymbol=" + tradingSymbol
+				+ ", totalProfitLoss=" + totalProfitLoss + "]";
+	}
+
+	public String getTradingSymbol() {
+		return tradingSymbol;
+	}
+
+	public void setTradingSymbol(String tradingSymbol) {
+		this.tradingSymbol = tradingSymbol;
 	}
 	
 	

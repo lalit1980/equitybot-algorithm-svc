@@ -1,6 +1,7 @@
 package com.equitybot.trade.algorithm.util;
 
 import com.equitybot.trade.algorithm.ignite.configs.IgniteConfig;
+import com.zerodhatech.models.Instrument;
 import com.zerodhatech.models.Tick;
 import org.apache.ignite.IgniteCache;
 import org.apache.ignite.cache.CacheAtomicityMode;
@@ -27,6 +28,8 @@ public class Cache {
     private IgniteCache<Long, Tick> cacheLatestTick;
     private IgniteCache<Long, Double> cacheTotalProfit;
     private IgniteCache<Long, Boolean> cacheTrailStopLossFlag;
+    
+    private IgniteCache<Long, Instrument> cacheInstrument;
 
 
 
@@ -68,6 +71,13 @@ public class Cache {
         ccfgcacheTrailStopLossFlag.setDataRegionName("1GB_Region");
         this.cacheTrailStopLossFlag = igniteConfig.getInstance().getOrCreateCache(ccfgcacheTrailStopLossFlag);
         
+        CacheConfiguration<Long, Instrument> ccfgcacheInstrument = new CacheConfiguration<Long, Instrument>("CacheInstrument");
+        ccfgcacheInstrument.setAtomicityMode(CacheAtomicityMode.ATOMIC);
+        ccfgcacheInstrument.setCacheMode(CacheMode.PARTITIONED);
+        ccfgcacheInstrument.setRebalanceMode(CacheRebalanceMode.NONE);
+        ccfgcacheInstrument.setDataRegionName("1GB_Region");
+		this.cacheInstrument = igniteConfig.getInstance().getOrCreateCache(ccfgcacheInstrument);
+        
        
     }
 
@@ -89,6 +99,14 @@ public class Cache {
 
 	public IgniteCache<Long, Boolean> getCacheTrailStopLossFlag() {
 		return cacheTrailStopLossFlag;
+	}
+
+	public IgniteCache<Long, Instrument> getCacheInstrument() {
+		return cacheInstrument;
+	}
+
+	public void setCacheInstrument(IgniteCache<Long, Instrument> cacheInstrument) {
+		this.cacheInstrument = cacheInstrument;
 	}
 
 }

@@ -12,6 +12,7 @@ public class LogData {
 	private String id;
 	@Indexed(name = "instrumentToken_index")
 	private long instrumentToken;
+	private String tradingSymbol;
 	private double open; 
 	private double high;
 	private double low;
@@ -117,11 +118,17 @@ public class LogData {
 	}
 	@Override
 	public String toString() {
-		return "LogData [id=" + id + ", instrumentToken=" + instrumentToken + ", open=" + open + ", high=" + high
-				+ ", low=" + low + ", close=" + close + ", trueRange=" + trueRange + ", ema=" + ema
-				+ ", basicUpperBand=" + basicUpperBand + ", basicLowerBand=" + basicLowerBand + ", finalUpperBand="
-				+ finalUpperBand + ", finalLowerBand=" + finalLowerBand + ", superTrend=" + superTrend + ", signal="
-				+ signal + ", transactionTime=" + transactionTime + "]";
+		return "LogData [id=" + id + ", instrumentToken=" + instrumentToken + ", tradingSymbol=" + tradingSymbol
+				+ ", open=" + open + ", high=" + high + ", low=" + low + ", close=" + close + ", trueRange=" + trueRange
+				+ ", ema=" + ema + ", basicUpperBand=" + basicUpperBand + ", basicLowerBand=" + basicLowerBand
+				+ ", finalUpperBand=" + finalUpperBand + ", finalLowerBand=" + finalLowerBand + ", superTrend="
+				+ superTrend + ", signal=" + signal + ", transactionTime=" + transactionTime + "]";
+	}
+	public String getTradingSymbol() {
+		return tradingSymbol;
+	}
+	public void setTradingSymbol(String tradingSymbol) {
+		this.tradingSymbol = tradingSymbol;
 	}
 	
 	

@@ -12,6 +12,7 @@ public class ActionLogData {
 	private String id;
 	@Indexed(name = "instrumentToken_index")
 	private long instrumentToken;
+	private String tradingSymbol;
 	private double close;
 	private String signal;
 	private Date transactionTime;
@@ -68,9 +69,15 @@ public class ActionLogData {
 	}
 	@Override
 	public String toString() {
-		return "ActionLogData [id=" + id + ", instrumentToken=" + instrumentToken + ", close=" + close + ", signal="
-				+ signal + ", transactionTime=" + transactionTime + ", profitAndLoss=" + profitAndLoss
-				+ ", totalProfitLoss=" + totalProfitLoss + ", type=" + type + "]";
+		return "ActionLogData [id=" + id + ", instrumentToken=" + instrumentToken + ", tradingSymbol=" + tradingSymbol
+				+ ", close=" + close + ", signal=" + signal + ", transactionTime=" + transactionTime
+				+ ", profitAndLoss=" + profitAndLoss + ", totalProfitLoss=" + totalProfitLoss + ", type=" + type + "]";
+	}
+	public String getTradingSymbol() {
+		return tradingSymbol;
+	}
+	public void setTradingSymbol(String tradingSymbol) {
+		this.tradingSymbol = tradingSymbol;
 	}
 	
 }

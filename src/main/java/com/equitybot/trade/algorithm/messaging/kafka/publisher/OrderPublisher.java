@@ -2,6 +2,7 @@ package com.equitybot.trade.algorithm.messaging.kafka.publisher;
 
 import com.equitybot.trade.algorithm.model.InstrumentSelectorDTO;
 import com.equitybot.trade.algorithm.model.OrderRequestDTO;
+import com.equitybot.trade.algorithm.util.Cache;
 import com.google.gson.Gson;
 import com.zerodhatech.kiteconnect.utils.Constants;
 import org.slf4j.Logger;
@@ -30,6 +31,9 @@ public class OrderPublisher {
     
     @Value("${supertrend.userid}")
     private String userid;
+    
+    @Autowired
+    private Cache cache;
 
     public void publishSellOrder(double closePrice,long instrument) {
         publish(closePrice,instrument, 0, Constants.TRANSACTION_TYPE_SELL, null);
@@ -45,6 +49,7 @@ public class OrderPublisher {
         orderBo.setInstrumentSelectorDTO(instrumentSelectorDTO);
         orderBo.setInstrumentToken(instrument);
         orderBo.setTransactionType(orderType);
+        orderBo.setTradingsymbol(cache.getCacheInstrument().get(instrument).getTradingsymbol());
         orderBo.setQuantity(80);
         orderBo.setTag("SuperTR");
         orderBo.setUserId(userid);
