@@ -15,7 +15,7 @@ public class ActionLogData {
 	private String tradingSymbol;
 	private double close;
 	private String signal;
-	private Date transactionTime;
+	private String transactionTime;
 	private double profitAndLoss;
 	private double totalProfitLoss;
 	private String type;
@@ -43,10 +43,10 @@ public class ActionLogData {
 	public void setSignal(String signal) {
 		this.signal = signal;
 	}
-	public Date getTransactionTime() {
+	public String getTransactionTime() {
 		return transactionTime;
 	}
-	public void setTransactionTime(Date transactionTime) {
+	public void setTransactionTime(String transactionTime) {
 		this.transactionTime = transactionTime;
 	}
 	public double getProfitAndLoss() {

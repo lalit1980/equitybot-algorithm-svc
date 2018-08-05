@@ -17,13 +17,7 @@ public class TimeSeriesReceiverListener {
 
     @Autowired
     Processor processor;
-/*
-    @KafkaListener(topicPartitions = { @TopicPartition(topic = "topic-data-seriesupdate", partitions = {"0"})})
-    public void listenPartition3(ConsumerRecord<?, ?> record) throws IOException {
-        processRequest(record.value().toString());
-    }
-*/
-    
+
     @KafkaListener(topicPartitions = {@TopicPartition(topic = "topic-data-seriesupdate", partitions = {"0"})})
     public void listenPartition0(ConsumerRecord<?, ?> record) throws IOException {
     	processRequest(record.value().toString());
@@ -38,10 +32,8 @@ public class TimeSeriesReceiverListener {
     public void listenPartition2(ConsumerRecord<?, ?> record) throws IOException {
     	processRequest(record.value().toString());
     }
-    
-    
+
     private void processRequest(String seriesName) throws IOException {
-        logger.info("Received Series Update for: " + seriesName);
         processor.processTimeSeries(seriesName);
     }
 

@@ -46,7 +46,7 @@ public class DBLogger {
         data.setSuperTrend(superTrendAnalyzer.getSuperTradeIndicator().getSuperTrend().doubleValue());
         data.setSignal(superTrendAnalyzer.getSuperTradeIndicator().getBuySell());
         data.setId(UUID.randomUUID().toString());
-        data.setTransactionTime(new Date());
+        data.setTransactionTime(DateFormatUtil.getCurrentISTTime());
         repo.saveTickData(data);
     }
 
@@ -57,7 +57,7 @@ public class DBLogger {
         data.setClose(superTrendAnalyzer.getSuperTradeIndicator().getBar().getClosePrice().doubleValue());
         data.setSignal(superTrendAnalyzer.getSuperTradeIndicator().getBuySell());
         data.setId(UUID.randomUUID().toString());
-        data.setTransactionTime(new Date());
+        data.setTransactionTime(DateFormatUtil.getCurrentISTTime());
         data.setProfitAndLoss(superTrendAnalyzer.getCurrentProfitLoss().doubleValue());
         data.setTotalProfitLoss(superTrendAnalyzer.getTotalProfitLoss().doubleValue());
         data.setType(type);

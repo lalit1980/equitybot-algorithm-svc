@@ -52,7 +52,7 @@ public class OrderPublisher {
         orderBo.setTradingsymbol(cache.getCacheInstrument().get(instrument).getTradingsymbol());
         orderBo.setQuantity(80);
         orderBo.setTag("SuperTR");
-        orderBo.setUserId(userid);
+        orderBo.setUserId("XS2241");
         String newJson = new Gson().toJson(orderBo);
         ListenableFuture<SendResult<String, String>> future = this.kafkaTemplate.send(orderProcessProducerTopic, newJson);
         future.addCallback(new ListenableFutureCallback<SendResult<String, String>>() {

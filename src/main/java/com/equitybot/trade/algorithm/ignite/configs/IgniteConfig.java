@@ -19,15 +19,6 @@ public class IgniteConfig {
 	static{
         try{
         	IgniteConfiguration cfg = new IgniteConfiguration();
-        	TcpDiscoverySpi tcpDiscoverySpi= new TcpDiscoverySpi();
-        	TcpDiscoveryKubernetesIpFinder ipFinder  = new TcpDiscoveryKubernetesIpFinder();
-        	ipFinder.setServiceName("ignite");
-        	ipFinder.setNamespace("default");
-        	ipFinder.setMasterUrl("https://api.apsouth.dev.etradingparagon.com");
-        	tcpDiscoverySpi.setIpFinder(ipFinder);
-        	cfg.setDiscoverySpi(tcpDiscoverySpi);
-        	cfg.setPeerClassLoadingEnabled(true);
-        	cfg.setClientMode(true);
         	ignite = Ignition.start(cfg);
         	Ignition.setClientMode(true);
         }catch(Exception e){

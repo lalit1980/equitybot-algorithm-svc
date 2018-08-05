@@ -25,7 +25,7 @@ public class LogData {
 	private double finalLowerBand;
 	private double superTrend;
 	private String signal;
-	private Date transactionTime;
+	private String transactionTime;
 	public String getId() {
 		return id;
 	}
@@ -110,10 +110,10 @@ public class LogData {
 	public void setSignal(String signal) {
 		this.signal = signal;
 	}
-	public Date getTransactionTime() {
+	public String getTransactionTime() {
 		return transactionTime;
 	}
-	public void setTransactionTime(Date transactionTime) {
+	public void setTransactionTime(String transactionTime) {
 		this.transactionTime = transactionTime;
 	}
 	@Override
