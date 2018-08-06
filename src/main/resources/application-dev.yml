@@ -43,7 +43,7 @@ supertrend:
   smaSize: 7
   userid: XS2241
 tick: 
-  barsize: 60
+  barsize: 300
   file: 
     Serializer: /Users/lalitsingh/data/TestData
   maxserializetick: 1024

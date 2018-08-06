@@ -43,7 +43,7 @@ supertrend:
   smaSize: 7
   userid: ${USERID}
 tick:
-  barsize: 60
+  barsize: 300
   file:
     Serializer: /data/logs
   maxserializetick: 1024
