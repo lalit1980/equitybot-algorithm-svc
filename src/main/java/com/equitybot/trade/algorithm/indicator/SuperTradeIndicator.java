@@ -11,18 +11,19 @@ import java.util.List;
 public class SuperTradeIndicator extends BaseIndicator {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
-    private final int smaSize;
+    private final int period;
     private long instrument;
-    private int bandSize;
+    private int multiplier;
     private boolean isInit;
     private List<Decimal> initTrueRangeList;
     private Bar previousBar;
     private Decimal previousFUB;
     private Decimal previousFLB;
-    private Decimal previousEMA;
+    private Decimal previousATR;
+    private Decimal previousST;
 
     private Decimal trueRange;
-    private Decimal exponentialMovingAverage;
+    private Decimal averageTrueRange;
     private Decimal basicUpperBand;
     private Decimal basicLowerBand;
     private Decimal finalUpperBand;
@@ -32,9 +33,9 @@ public class SuperTradeIndicator extends BaseIndicator {
     private Bar bar;
 
 
-    public SuperTradeIndicator(int bandSize, int smaSize, long instrument) {
-        this.bandSize = bandSize;
-        this.smaSize = smaSize;
+    public SuperTradeIndicator(int multiplier, int period, long instrument) {
+        this.multiplier = multiplier;
+        this.period = period;
         this.instrument = instrument;
         this.isInit = false;
         this.initTrueRangeList = new LinkedList<>();
@@ -53,36 +54,49 @@ public class SuperTradeIndicator extends BaseIndicator {
     }
 
     private Decimal calculate() {
-        this.trueRange = calculateTrueRange(this.previousBar, this.bar);
-        this.exponentialMovingAverage = calculateEMA(this.previousEMA, this.trueRange);
-        this.basicUpperBand = calculateBasicUpperBand(this.bar, this.exponentialMovingAverage, this.bandSize);
-        this.basicLowerBand = calculateBasicLowerBand(this.bar, this.exponentialMovingAverage, this.bandSize);
-        this.finalUpperBand = calculateFinalUpperBand(this.basicUpperBand, this.previousFUB, this.previousBar);
-        this.finalLowerBand = calculateFinalLowerBand(this.basicLowerBand, this.previousFLB, this.previousBar);
-        this.superTrend = calculateSuperTrend(this.bar, this.finalUpperBand, this.finalLowerBand);
-        this.buySell = calculateBuySell(this.bar, this.superTrend);
-        return this.superTrend;
+    	 this.trueRange = calculateTrueRange(this.previousBar, this.bar);
+         this.initTrueRangeList.remove(0);
+         this.initTrueRangeList.add(this.trueRange);
+         this.averageTrueRange = calculateEMA(this.previousATR, this.trueRange,
+                 smoothingConstant(this.period));
+         this.basicUpperBand = calculateBasicUpperBand(this.bar,
+                 this.averageTrueRange, this.multiplier);
+         this.basicLowerBand = calculateBasicLowerBand(this.bar,
+                 this.averageTrueRange, this.multiplier);
+         this.finalUpperBand = calculateFinalUpperBand(this.basicUpperBand,
+                 this.previousFUB, this.previousBar);
+         this.finalLowerBand = calculateFinalLowerBand(this.basicLowerBand,
+                 this.previousFLB, this.previousBar);
+         this.superTrend = calculateSuperTrend(this.bar, this.finalUpperBand, this.finalLowerBand, this.previousFLB,
+                 this.previousST, this.previousFUB);
+         this.buySell = calculateBuySell(this.bar, this.superTrend);
+         return this.superTrend;
     }
 
     private Decimal init() {
-        this.trueRange = Decimal.ZERO;
-        this.exponentialMovingAverage = Decimal.ZERO;
+    	this.trueRange = Decimal.ZERO;
+        this.averageTrueRange = Decimal.ZERO;
         this.basicUpperBand = Decimal.ZERO;
         this.basicLowerBand = Decimal.ZERO;
         this.finalUpperBand = Decimal.ZERO;
         this.finalLowerBand = Decimal.ZERO;
-        this.superTrend = calculateSuperTrend(this.bar, this.finalUpperBand, this.finalLowerBand);
+        this.superTrend = Decimal.ZERO;
+
         if (this.previousBar != null) {
             this.trueRange = calculateTrueRange(this.previousBar, this.bar);
             this.initTrueRangeList.add(this.trueRange);
         }
-        if (this.initTrueRangeList.size() == this.smaSize) {
-            this.exponentialMovingAverage = calculateSMA(this.initTrueRangeList);
-            this.basicUpperBand = calculateBasicUpperBand(this.bar, this.exponentialMovingAverage, this.bandSize);
-            this.basicLowerBand = calculateBasicLowerBand(this.bar, this.exponentialMovingAverage, this.bandSize);
-            this.finalUpperBand = calculateFinalUpperBand(this.basicUpperBand, Decimal.ZERO, this.previousBar);
-            this.finalLowerBand = calculateFinalLowerBand(this.basicLowerBand, Decimal.ZERO, this.previousBar);
-            this.superTrend = calculateSuperTrend(this.bar, this.finalUpperBand, this.finalLowerBand);
+        if (this.initTrueRangeList.size() == this.period) {
+            this.averageTrueRange = calculateSMA(this.initTrueRangeList);
+            this.basicUpperBand = calculateBasicUpperBand(this.bar,
+                    this.averageTrueRange, this.multiplier);
+            this.basicLowerBand = calculateBasicLowerBand(this.bar,
+                    this.averageTrueRange, this.multiplier);
+            this.finalUpperBand = this.basicUpperBand;
+            this.finalLowerBand = this.basicLowerBand;
+            this.superTrend = calculateSuperTrend(this.bar, this.finalUpperBand,
+                    this.finalLowerBand, this.previousFLB, this.previousST, this.previousFUB);
+            this.buySell = calculateBuySell(this.bar, this.superTrend);
             this.isInit = true;
         }
         return this.superTrend;
@@ -91,8 +105,9 @@ public class SuperTradeIndicator extends BaseIndicator {
     private void updateValues(Bar workingBar) {
         this.previousFLB = this.finalLowerBand;
         this.previousFUB = this.finalUpperBand;
-        this.previousEMA = this.exponentialMovingAverage;
+        this.previousATR = this.averageTrueRange;
         this.previousBar = this.bar;
+        this.previousST = this.superTrend;
         this.bar = workingBar;
     }
 
@@ -104,8 +119,8 @@ public class SuperTradeIndicator extends BaseIndicator {
         return trueRange;
     }
 
-    public Decimal getExponentialMovingAverage() {
-        return exponentialMovingAverage;
+    public Decimal getAverageTrueRange() {
+        return averageTrueRange;
     }
 
     public Decimal getBasicUpperBand() {
@@ -139,17 +154,17 @@ public class SuperTradeIndicator extends BaseIndicator {
     @Override
     public String toString() {
         return "SuperTradeIndicator{" +
-                "smaSize=" + smaSize +
+                "period=" + period +
                 ", instrument=" + instrument +
-                ", bandSize=" + bandSize +
+                ", multiplier=" + multiplier +
                 ", isInit=" + isInit +
                 ", initTrueRangeList=" + initTrueRangeList +
                 ", previousBar=" + previousBar +
                 ", previousFUB=" + previousFUB +
                 ", previousFLB=" + previousFLB +
-                ", previousEMA=" + previousEMA +
+                ", previousATR=" + previousATR +
                 ", trueRange=" + trueRange +
-                ", exponentialMovingAverage=" + exponentialMovingAverage +
+                ", averageTrueRange=" + averageTrueRange +
                 ", basicUpperBand=" + basicUpperBand +
                 ", basicLowerBand=" + basicLowerBand +
                 ", finalUpperBand=" + finalUpperBand +
@@ -158,5 +173,9 @@ public class SuperTradeIndicator extends BaseIndicator {
                 ", buySell='" + buySell + '\'' +
                 ", bar=" + bar +
                 '}';
+    }
+    
+    private static Decimal smoothingConstant(int period) {
+        return Decimal.ONE.dividedBy(period);
     }
 }

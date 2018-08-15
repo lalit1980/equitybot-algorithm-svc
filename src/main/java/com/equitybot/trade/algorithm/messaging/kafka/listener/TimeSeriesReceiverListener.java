@@ -34,6 +34,7 @@ public class TimeSeriesReceiverListener {
     }
 
     private void processRequest(String seriesName) throws IOException {
+    	logger.info("Received Tick for Series: "+seriesName);
         processor.processTimeSeries(seriesName);
     }
 

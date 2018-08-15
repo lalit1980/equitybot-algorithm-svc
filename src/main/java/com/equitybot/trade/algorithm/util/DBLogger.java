@@ -38,7 +38,7 @@ public class DBLogger {
         data.setLow(superTrendAnalyzer.getSuperTradeIndicator().getBar().getMinPrice().doubleValue());
         data.setClose(superTrendAnalyzer.getSuperTradeIndicator().getBar().getClosePrice().doubleValue());
         data.setTrueRange(superTrendAnalyzer.getSuperTradeIndicator().getTrueRange().doubleValue());
-        data.setEma(superTrendAnalyzer.getSuperTradeIndicator().getExponentialMovingAverage().doubleValue());
+        data.setEma(superTrendAnalyzer.getSuperTradeIndicator().getAverageTrueRange().doubleValue());
         data.setBasicUpperBand(superTrendAnalyzer.getSuperTradeIndicator().getBasicUpperBand().doubleValue());
         data.setBasicLowerBand(superTrendAnalyzer.getSuperTradeIndicator().getBasicLowerBand().doubleValue());
         data.setFinalUpperBand(superTrendAnalyzer.getSuperTradeIndicator().getFinalUpperBand().doubleValue());
@@ -46,7 +46,8 @@ public class DBLogger {
         data.setSuperTrend(superTrendAnalyzer.getSuperTradeIndicator().getSuperTrend().doubleValue());
         data.setSignal(superTrendAnalyzer.getSuperTradeIndicator().getBuySell());
         data.setId(UUID.randomUUID().toString());
-        data.setTransactionTime(DateFormatUtil.getCurrentISTTime());
+        data.setTransactionTime(superTrendAnalyzer.getSuperTradeIndicator().getBar().getEndTime().toString());
+       // data.setTransactionTime(DateFormatUtil.getCurrentISTTime());
         repo.saveTickData(data);
     }
 

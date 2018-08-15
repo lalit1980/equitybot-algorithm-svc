@@ -37,13 +37,13 @@ spring:
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
   profiles: dev
 supertrend: 
-  bandSize: 3
+  multiplier: 3
   csvPath: /Users/lalitsingh/data/csv/
   maxBarCount: 20
-  smaSize: 7
-  userid: XS2241
+  period: 7
+  userid: WU6870
 tick: 
-  barsize: 300
+  barsize: 60
   file: 
     Serializer: /Users/lalitsingh/data/TestData
   maxserializetick: 1024

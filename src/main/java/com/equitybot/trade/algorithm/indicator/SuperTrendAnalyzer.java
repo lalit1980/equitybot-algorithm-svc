@@ -15,8 +15,8 @@ public class SuperTrendAnalyzer extends BaseIndicator {
     private byte action;
     private long barCount;
 
-    public SuperTrendAnalyzer(int bandSize, int smaSize, long instrument) {
-        this.superTradeIndicator = new SuperTradeIndicator(bandSize, smaSize, instrument);
+    public SuperTrendAnalyzer(int multiplier, int period, long instrument) {
+        this.superTradeIndicator = new SuperTradeIndicator(multiplier, period, instrument);
         this.haveBuy = false;
         this.totalProfitLoss = Decimal.ZERO;
         action = 0;

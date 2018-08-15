@@ -37,10 +37,10 @@ spring:
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
   profiles: kubernetes
 supertrend:
-  bandSize: 3
+  multiplier: 3
   csvPath: /data/logs
   maxBarCount: 20
-  smaSize: 7
+  period: 7
   userid: ${USERID}
 tick:
   barsize: 300

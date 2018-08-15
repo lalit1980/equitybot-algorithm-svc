@@ -23,11 +23,11 @@ public class SuperTrendStrategy {
     @Autowired
     private DBLogger DBLogger;
 
-    @Value("${supertrend.bandSize}")
-    private int bandSize;
+    @Value("${supertrend.multiplier}")
+    private int multiplier;
 
-    @Value("${supertrend.smaSize}")
-    private int smaSize;
+    @Value("${supertrend.period}")
+    private int period;
 
 
     @Autowired
@@ -73,7 +73,7 @@ public class SuperTrendStrategy {
     }
 
     private SuperTrendAnalyzer getSuperTrendAnalyzer(final Long instrument) {
-        return new SuperTrendAnalyzer(this.bandSize, this.smaSize, instrument);
+        return new SuperTrendAnalyzer(this.multiplier, this.period, instrument);
     }
 
 }
