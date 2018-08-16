@@ -27,8 +27,17 @@ public class Cache {
     private IgniteCache<Long, Double> cacheTotalProfit;
     private IgniteCache<Long, Boolean> cacheTrailStopLossFlag;
     private IgniteCache<Long, Instrument> cacheInstrument;
+    private IgniteCache<Long, Boolean> startTrade;
 
-    public Cache(){
+    public IgniteCache<Long, Boolean> getStartTrade() {
+		return startTrade;
+	}
+
+	public void setStartTrade(IgniteCache<Long, Boolean> startTrade) {
+		this.startTrade = startTrade;
+	}
+
+	public Cache(){
         CacheConfiguration<Long, String> ccfgOrderDetails = new CacheConfiguration<Long, String>("CachedTradeOrder");
         this.boughtInstruments = igniteConfig.getInstance().getOrCreateCache(ccfgOrderDetails);
 
@@ -47,6 +56,9 @@ public class Cache {
         
         CacheConfiguration<Long, Instrument> ccfgcacheInstrument = new CacheConfiguration<Long, Instrument>("CacheInstrument");
 		this.cacheInstrument = igniteConfig.getInstance().getOrCreateCache(ccfgcacheInstrument);
+		
+		CacheConfiguration<Long, Boolean> ccfgcStartTrade = new CacheConfiguration<Long, Boolean>("CacheStartTrade");
+		 this.startTrade = igniteConfig.getInstance().getOrCreateCache(ccfgcStartTrade);
     }
 
     public IgniteCache<Long, String> getBoughtInstruments() {

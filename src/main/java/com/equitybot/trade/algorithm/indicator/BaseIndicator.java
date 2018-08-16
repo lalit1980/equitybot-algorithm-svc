@@ -16,7 +16,6 @@ public class BaseIndicator {
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	public Decimal calculateTrueRange(Bar previousBar, Bar workingBar) {
-		logger.info(" * added new True Range for instrument");
 		return workingBar.getMaxPrice().minus(workingBar.getMinPrice())
                 .max((workingBar.getMaxPrice().minus(previousBar.getClosePrice()).abs()))
                 .max((workingBar.getMinPrice().minus(previousBar.getClosePrice()).abs()));
@@ -25,7 +24,6 @@ public class BaseIndicator {
 	}
 
 	public  Decimal calculateSMA(List<Decimal> trueRangeList) {
-		logger.info(" * calculate SMA");
 	        Decimal sma = Decimal.valueOf(0);
 	        for (Decimal trueRange : trueRangeList) {
 	            sma = sma.plus(trueRange);
@@ -36,24 +34,20 @@ public class BaseIndicator {
 	}
 
 	public Decimal calculateEMA(Decimal previousEMA, Decimal workingTR, Decimal smoothingConstant) {
-		logger.info(" * calculate EMA");
         return smoothingConstant.multipliedBy(workingTR.minus(previousEMA)).plus(previousEMA);
 	}
 
 	public Decimal calculateBasicUpperBand(Bar workingBar, Decimal workingEMA, int multiplier) {
-		logger.info(" * calculate Basic Upper Band");
         return workingBar.getMaxPrice().plus(workingBar.getMinPrice()).dividedBy(Decimal.TWO)
                 .plus(workingEMA.multipliedBy(multiplier));
 	}
 
 	public Decimal calculateBasicLowerBand(Bar workingBar, Decimal workingEMA, int multiplier) {
-		logger.info(" * calculate Basic Lower Band");
         return workingBar.getMaxPrice().plus(workingBar.getMinPrice()).dividedBy(Decimal.TWO)
                 .minus(workingEMA.multipliedBy(multiplier));
 	}
 
 	public Decimal calculateFinalUpperBand(Decimal workingBUB, Decimal previousFUB, Bar previousBar) {
-		logger.info(" * calculate Final Upper Band");
         Decimal finalUpperBand;
         if (workingBUB.isLessThan(previousFUB) || previousBar.getClosePrice().isGreaterThan(previousFUB)) {
             finalUpperBand = workingBUB;
@@ -64,7 +58,6 @@ public class BaseIndicator {
 	}
 
 	public Decimal calculateFinalLowerBand(Decimal workingBLB, Decimal previousFLB, Bar previousBar) {
-		logger.info(" * calculate Final Lower Band");
         Decimal finalLowerBand;
         if (workingBLB.isGreaterThan(previousFLB) || previousBar.getClosePrice().isLessThan(previousFLB)) {
             finalLowerBand = workingBLB;
@@ -76,7 +69,6 @@ public class BaseIndicator {
 
 	public Decimal calculateSuperTrend(Bar workingBar, Decimal workingFUB, Decimal workingFLB, Decimal previousFLB, 
 			Decimal previousST, Decimal previousFUB) {
-		logger.info(" * adding new Super Trend");
         Decimal superTrend;
         if (previousST.
         		equals(previousFUB) && 
@@ -97,7 +89,6 @@ public class BaseIndicator {
 	}
 
 	public String calculateBuySell(Bar workingBar, Decimal workingSuperTrend) {
-		logger.info(" * Adding new Super Trend BuyS Sell");
 		String superTrendBuySell;
 		if (workingBar.getClosePrice().isLessThan(workingSuperTrend)) {
 			superTrendBuySell = Constant.SELL;

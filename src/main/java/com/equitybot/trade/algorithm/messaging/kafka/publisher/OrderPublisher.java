@@ -21,51 +21,58 @@ import org.springframework.util.concurrent.ListenableFutureCallback;
 @Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
 public class OrderPublisher {
 
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    @Autowired
-    private KafkaTemplate<String, String> kafkaTemplate;
+	@Autowired
+	private KafkaTemplate<String, String> kafkaTemplate;
 
-    @Value("${spring.kafka.producer.topic-kite-tradeorder}")
-    private String orderProcessProducerTopic;
-    
-    @Value("${supertrend.userid}")
-    private String userid;
-    
-    @Autowired
-    private Cache cache;
+	@Value("${spring.kafka.producer.topic-kite-tradeorder}")
+	private String orderProcessProducerTopic;
 
-    public void publishSellOrder(double closePrice,long instrument) {
-        publish(closePrice,instrument, 0, Constants.TRANSACTION_TYPE_SELL, null);
-    }
+	@Value("${supertrend.userid}")
+	private String userid;
 
-    public void publishBuyOrder(double closePrice,long instrument, int orderQuantity, InstrumentSelectorDTO instrumentSelectorDTO) {
-        publish(closePrice,instrument, orderQuantity, Constants.TRANSACTION_TYPE_BUY, instrumentSelectorDTO);
-    }
+	@Autowired
+	private Cache cache;
 
-    private void publish(double closePrice,long instrument, int orderQuantity, String orderType, InstrumentSelectorDTO instrumentSelectorDTO) {
-        OrderRequestDTO orderBo = new OrderRequestDTO();
-        orderBo.setPrice(closePrice);
-        orderBo.setInstrumentSelectorDTO(instrumentSelectorDTO);
-        orderBo.setInstrumentToken(instrument);
-        orderBo.setTransactionType(orderType);
-        orderBo.setTradingsymbol(cache.getCacheInstrument().get(instrument).getTradingsymbol());
-        orderBo.setQuantity(80);
-        orderBo.setTag("SuperTR");
-        orderBo.setUserId("WU6870");
-        String newJson = new Gson().toJson(orderBo);
-        ListenableFuture<SendResult<String, String>> future = this.kafkaTemplate.send(orderProcessProducerTopic, newJson);
-        future.addCallback(new ListenableFutureCallback<SendResult<String, String>>() {
-            @Override
-            public void onSuccess(SendResult<String, String> result) {
-                logger.info("Sent Sell Order: {}", result);
-            }
+	public void publishSellOrder(double closePrice, long instrument) {
+		if (cache.getStartTrade().get(instrument)) {
+			publish(closePrice, instrument, 0, Constants.TRANSACTION_TYPE_SELL, null);
+		}
+	}
 
-            @Override
-            public void onFailure(Throwable ex) {
-                logger.info("Failed to send message");
-            }
-        });
-    }
+	public void publishBuyOrder(double closePrice, long instrument, int orderQuantity,
+			InstrumentSelectorDTO instrumentSelectorDTO) {
+		if (cache.getStartTrade().get(instrument)) {
+			publish(closePrice, instrument, orderQuantity, Constants.TRANSACTION_TYPE_BUY, instrumentSelectorDTO);
+		}
+	}
+
+	private void publish(double closePrice, long instrument, int orderQuantity, String orderType,
+			InstrumentSelectorDTO instrumentSelectorDTO) {
+		OrderRequestDTO orderBo = new OrderRequestDTO();
+		orderBo.setPrice(closePrice);
+		orderBo.setInstrumentSelectorDTO(instrumentSelectorDTO);
+		orderBo.setInstrumentToken(instrument);
+		orderBo.setTransactionType(orderType);
+		orderBo.setTradingsymbol(cache.getCacheInstrument().get(instrument).getTradingsymbol());
+		orderBo.setQuantity(80);
+		orderBo.setTag("SuperTR");
+		orderBo.setUserId("WU6870");
+		String newJson = new Gson().toJson(orderBo);
+		ListenableFuture<SendResult<String, String>> future = this.kafkaTemplate.send(orderProcessProducerTopic,
+				newJson);
+		future.addCallback(new ListenableFutureCallback<SendResult<String, String>>() {
+			@Override
+			public void onSuccess(SendResult<String, String> result) {
+				logger.info("Sent Sell Order: {}", result);
+			}
+
+			@Override
+			public void onFailure(Throwable ex) {
+				logger.info("Failed to send message");
+			}
+		});
+	}
 
 }
