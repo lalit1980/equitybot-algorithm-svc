@@ -53,13 +53,12 @@ public class SuperTrendStrategy {
 
     private void log(SuperTrendAnalyzer superTrendAnalyzer) {
         this.DBLogger.logSuperTrendData(superTrendAnalyzer);
-
         if (superTrendAnalyzer.getAction() == -1) {
             sell(superTrendAnalyzer);
         } else if (superTrendAnalyzer.getAction() == 1) {
             buy(superTrendAnalyzer);
         } else {
-            logger.info("No action indicated");
+            logger.info("No action indicated IN DB LOGGER");
         }
     }
 

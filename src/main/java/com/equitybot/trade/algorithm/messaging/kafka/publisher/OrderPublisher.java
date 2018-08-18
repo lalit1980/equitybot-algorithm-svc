@@ -36,14 +36,19 @@ public class OrderPublisher {
 	private Cache cache;
 
 	public void publishSellOrder(double closePrice, long instrument) {
-		if (cache.getStartTrade().get(instrument)) {
+		boolean startTradeFlag=cache.getStartTrade().get(instrument);
+		logger.info("Start Trade Flag in Algo Sell Order: "+startTradeFlag);
+		
+		if (startTradeFlag) {
 			publish(closePrice, instrument, 0, Constants.TRANSACTION_TYPE_SELL, null);
 		}
 	}
 
 	public void publishBuyOrder(double closePrice, long instrument, int orderQuantity,
 			InstrumentSelectorDTO instrumentSelectorDTO) {
-		if (cache.getStartTrade().get(instrument)) {
+		boolean startTradeFlag=cache.getStartTrade().get(instrument);
+		logger.info("Start Trade Flag in Algo Buy order: "+startTradeFlag);
+		if (startTradeFlag) {
 			publish(closePrice, instrument, orderQuantity, Constants.TRANSACTION_TYPE_BUY, instrumentSelectorDTO);
 		}
 	}
@@ -57,7 +62,7 @@ public class OrderPublisher {
 		orderBo.setTransactionType(orderType);
 		orderBo.setTradingsymbol(cache.getCacheInstrument().get(instrument).getTradingsymbol());
 		orderBo.setQuantity(80);
-		orderBo.setTag("SuperTR");
+		orderBo.setTag("STR");
 		orderBo.setUserId("WU6870");
 		String newJson = new Gson().toJson(orderBo);
 		ListenableFuture<SendResult<String, String>> future = this.kafkaTemplate.send(orderProcessProducerTopic,

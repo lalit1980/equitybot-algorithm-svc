@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.ta4j.core.TimeSeries;
 
 import com.equitybot.trade.algorithm.ignite.configs.IgniteConfig;
+import com.zerodhatech.kiteconnect.KiteConnect;
 import com.zerodhatech.models.Instrument;
 import com.zerodhatech.models.Tick;
 
@@ -28,6 +29,7 @@ public class Cache {
     private IgniteCache<Long, Boolean> cacheTrailStopLossFlag;
     private IgniteCache<Long, Instrument> cacheInstrument;
     private IgniteCache<Long, Boolean> startTrade;
+    private IgniteCache<String, KiteConnect> cacheUserSession;
 
     public IgniteCache<Long, Boolean> getStartTrade() {
 		return startTrade;
@@ -59,6 +61,9 @@ public class Cache {
 		
 		CacheConfiguration<Long, Boolean> ccfgcStartTrade = new CacheConfiguration<Long, Boolean>("CacheStartTrade");
 		 this.startTrade = igniteConfig.getInstance().getOrCreateCache(ccfgcStartTrade);
+		 
+		 CacheConfiguration<String, KiteConnect> ccfgcKiteSession = new CacheConfiguration<String, KiteConnect>("CacheUserSession");
+		 this.cacheUserSession = igniteConfig.getInstance().getOrCreateCache(ccfgcKiteSession);
     }
 
     public IgniteCache<Long, String> getBoughtInstruments() {
@@ -87,6 +92,14 @@ public class Cache {
 
 	public void setCacheInstrument(IgniteCache<Long, Instrument> cacheInstrument) {
 		this.cacheInstrument = cacheInstrument;
+	}
+
+	public IgniteCache<String, KiteConnect> getCacheUserSession() {
+		return cacheUserSession;
+	}
+
+	public void setCacheUserSession(IgniteCache<String, KiteConnect> cacheUserSession) {
+		this.cacheUserSession = cacheUserSession;
 	}
 
 }
