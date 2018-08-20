@@ -57,8 +57,6 @@ public class SuperTrendStrategy {
             sell(superTrendAnalyzer);
         } else if (superTrendAnalyzer.getAction() == 1) {
             buy(superTrendAnalyzer);
-        } else {
-            logger.info("No action indicated IN DB LOGGER");
         }
     }
 
