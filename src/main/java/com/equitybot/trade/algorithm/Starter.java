@@ -33,6 +33,4 @@ public class Starter {
 				.build()
 				.apiInfo(new ApiInfoBuilder().version("1.0").title("Action Log API").description("Action Log API v1.0").build());
 	}
-	
-	
 }
