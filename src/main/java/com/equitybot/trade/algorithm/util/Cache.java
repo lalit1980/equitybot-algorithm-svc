@@ -30,6 +30,7 @@ public class Cache {
     private IgniteCache<Long, Instrument> cacheInstrument;
     private IgniteCache<Long, Boolean> startTrade;
     private IgniteCache<String, KiteConnect> cacheUserSession;
+    private IgniteCache<String, Integer> cacheQuantity;
 
     public IgniteCache<Long, Boolean> getStartTrade() {
 		return startTrade;
@@ -64,6 +65,9 @@ public class Cache {
 		 
 		 CacheConfiguration<String, KiteConnect> ccfgcKiteSession = new CacheConfiguration<String, KiteConnect>("CacheUserSession");
 		 this.cacheUserSession = igniteConfig.getInstance().getOrCreateCache(ccfgcKiteSession);
+		 
+		 CacheConfiguration<String, Integer> ccfgcQuantity = new CacheConfiguration<String, Integer>("CacheQuantity");
+		 this.cacheQuantity = igniteConfig.getInstance().getOrCreateCache(ccfgcQuantity);
     }
 
     public IgniteCache<Long, String> getBoughtInstruments() {
@@ -100,6 +104,14 @@ public class Cache {
 
 	public void setCacheUserSession(IgniteCache<String, KiteConnect> cacheUserSession) {
 		this.cacheUserSession = cacheUserSession;
+	}
+
+	public IgniteCache<String, Integer> getCacheQuantity() {
+		return cacheQuantity;
+	}
+
+	public void setCacheQuantity(IgniteCache<String, Integer> cacheQuantity) {
+		this.cacheQuantity = cacheQuantity;
 	}
 
 }

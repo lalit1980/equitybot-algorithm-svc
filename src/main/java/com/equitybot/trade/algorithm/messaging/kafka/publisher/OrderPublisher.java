@@ -53,7 +53,7 @@ public class OrderPublisher {
 		}
 	}
 
-	private void publish(double closePrice, long instrument, int orderQuantity, String orderType,
+	public void publish(double closePrice, long instrument, int orderQuantity, String orderType,
 			InstrumentSelectorDTO instrumentSelectorDTO) {
 		OrderRequestDTO orderBo = new OrderRequestDTO();
 		orderBo.setPrice(closePrice);

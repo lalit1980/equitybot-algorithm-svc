@@ -6,6 +6,8 @@ import com.equitybot.trade.algorithm.util.Cache;
 import com.equitybot.trade.algorithm.indicator.SuperTrendAnalyzer;
 import com.equitybot.trade.algorithm.strategy.SuperTrendStrategy;
 import com.equitybot.trade.algorithm.util.InstrumentSelector;
+import com.zerodhatech.models.Instrument;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,34 +58,51 @@ public class Processor {
     }
 
     private void publishOrder(SuperTrendAnalyzer superTrendAnalyzer) {
-        if (superTrendAnalyzer.getAction() == -1) {
+        /*if (superTrendAnalyzer.getAction() == -1) {
             sell(superTrendAnalyzer);
         } else if (superTrendAnalyzer.getAction() == 1) {
             buy(superTrendAnalyzer);
-        } 
+        } */
+    	Instrument instrument = cache.getCacheInstrument().get(superTrendAnalyzer.getSuperTradeIndicator().getInstrument());
+    	boolean startTradeFlag=cache.getStartTrade().get(instrument.getInstrument_token());
+    	 logger.info("$$$$$$$$$$Order type in processor..... "+superTrendAnalyzer.getSuperTradeIndicator().getBuySell()+" Start Trade flag: "+startTradeFlag);
+    	if (startTradeFlag) {
+    		InstrumentSelectorDTO instrumentSelectorDTO = this.instrumentSelector.eligibleInstrument(superTrendAnalyzer
+                    .getSuperTradeIndicator().getInstrument(), superTrendAnalyzer.getSuperTradeIndicator()
+            .getBar().getClosePrice().doubleValue());
+            
+            cache.getCacheQuantity().get(instrument.getTradingsymbol());
+            this.orderPublisher.publish(superTrendAnalyzer.getSuperTradeIndicator()
+            .getBar().getClosePrice().doubleValue(), superTrendAnalyzer.getSuperTradeIndicator().getInstrument(), cache.getCacheQuantity().get(instrument.getTradingsymbol()),
+            superTrendAnalyzer.getSuperTradeIndicator().getBuySell(), instrumentSelectorDTO);
+    	}
     }
 
     private void buy(SuperTrendAnalyzer superTrendAnalyzer) {
-        if (!this.cache.getBoughtInstruments().containsKey(superTrendAnalyzer.getSuperTradeIndicator().getInstrument())) {
-            InstrumentSelectorDTO instrumentSelectorDTO = this.instrumentSelector.eligibleInstrument(superTrendAnalyzer
-                            .getSuperTradeIndicator().getInstrument(), superTrendAnalyzer.getSuperTradeIndicator()
-                    .getBar().getClosePrice().doubleValue());
-            if (!this.cache.getBoughtInstruments().containsKey(superTrendAnalyzer.getSuperTradeIndicator().getInstrument())) {
-            	this.orderPublisher.publishBuyOrder(superTrendAnalyzer.getSuperTradeIndicator()
-                        .getBar().getClosePrice().doubleValue(),superTrendAnalyzer.getSuperTradeIndicator().getInstrument(),
-                        instrumentSelectorDTO.getExpectedQuantity().intValue(), instrumentSelectorDTO); 
+    	/* 	
+    	InstrumentSelectorDTO instrumentSelectorDTO = this.instrumentSelector.eligibleInstrument(superTrendAnalyzer
+                .getSuperTradeIndicator().getInstrument(), superTrendAnalyzer.getSuperTradeIndicator()
+        .getBar().getClosePrice().doubleValue());
+this.orderPublisher.publishBuyOrder(superTrendAnalyzer.getSuperTradeIndicator()
+        .getBar().getClosePrice().doubleValue(),superTrendAnalyzer.getSuperTradeIndicator().getInstrument(),
+        instrumentSelectorDTO.getExpectedQuantity().intValue(), instrumentSelectorDTO); */
+    }
+/*if (!this.cache.getBoughtInstruments().containsKey(superTrendAnalyzer.getSuperTradeIndicator().getInstrument())) {
+            
+        	  if (!this.cache.getBoughtInstruments().containsKey(superTrendAnalyzer.getSuperTradeIndicator().getInstrument())) {
+            
             }
             
-            /*if(instrumentSelectorDTO.getInstrumentProfit()>=0) {
+           if(instrumentSelectorDTO.getInstrumentProfit()>=0) {
             	 
-            }*/
+            }
         }
-    }
+    }*/
 
     private void sell(SuperTrendAnalyzer superTrendAnalyzer) {
         if (this.cache.getBoughtInstruments().containsKey(superTrendAnalyzer.getSuperTradeIndicator().getInstrument())) {
-            this.orderPublisher.publishSellOrder(superTrendAnalyzer.getSuperTradeIndicator()
-                    .getBar().getClosePrice().doubleValue(),superTrendAnalyzer.getSuperTradeIndicator().getInstrument());
+            /*this.orderPublisher.publishSellOrder(superTrendAnalyzer.getSuperTradeIndicator()
+                    .getBar().getClosePrice().doubleValue(),superTrendAnalyzer.getSuperTradeIndicator().getInstrument());*/
         }
     }
 
