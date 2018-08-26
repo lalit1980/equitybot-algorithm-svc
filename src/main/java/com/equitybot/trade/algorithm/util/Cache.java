@@ -10,7 +10,6 @@ import org.ta4j.core.TimeSeries;
 
 import com.equitybot.trade.algorithm.ignite.configs.IgniteConfig;
 import com.zerodhatech.kiteconnect.KiteConnect;
-import com.zerodhatech.models.Instrument;
 import com.zerodhatech.models.Tick;
 
 @Service
@@ -24,13 +23,14 @@ public class Cache {
 
     private IgniteCache<String, TimeSeries> timeSeries;
 
-    private IgniteCache<Long, Tick> cacheLatestTick;
     private IgniteCache<Long, Double> cacheTotalProfit;
     private IgniteCache<Long, Boolean> cacheTrailStopLossFlag;
-    private IgniteCache<Long, Instrument> cacheInstrument;
+    private IgniteCache<Long, String> cacheInstrumentTradingSymbol;
     private IgniteCache<Long, Boolean> startTrade;
     private IgniteCache<String, KiteConnect> cacheUserSession;
-    private IgniteCache<String, Integer> cacheQuantity;
+    private IgniteCache<Long, Integer> cacheQuantity;
+	private IgniteCache<Long, Double> cacheLastTradedPrice;
+	private IgniteCache<Long, String> cacheOrderPublisher;
 
     public IgniteCache<Long, Boolean> getStartTrade() {
 		return startTrade;
@@ -41,24 +41,24 @@ public class Cache {
 	}
 
 	public Cache(){
+		CacheConfiguration<Long, Double> ccfgLastTradedPrice = new CacheConfiguration<Long, Double>("LastTradedPrice");
+		this.cacheLastTradedPrice = igniteConfig.getInstance().getOrCreateCache(ccfgLastTradedPrice);
+		
         CacheConfiguration<Long, String> ccfgOrderDetails = new CacheConfiguration<Long, String>("CachedTradeOrder");
         this.boughtInstruments = igniteConfig.getInstance().getOrCreateCache(ccfgOrderDetails);
 
         CacheConfiguration<String, TimeSeries> ccfg = new CacheConfiguration<String, TimeSeries>("TimeSeriesCache");
         this.timeSeries = igniteConfig.getInstance().getOrCreateCache(ccfg);
 
-
-        CacheConfiguration<Long, Tick> ccfgLatestTickParams = new CacheConfiguration<>("CachedLatestTick");
-        this.cacheLatestTick = igniteConfig.getInstance().getOrCreateCache(ccfgLatestTickParams);
-        
         CacheConfiguration<Long, Double> ccfgcacheTotalProfit = new CacheConfiguration<Long, Double>("CacheTotalProfit");
         this.cacheTotalProfit = igniteConfig.getInstance().getOrCreateCache(ccfgcacheTotalProfit);
         
         CacheConfiguration<Long, Boolean> ccfgcacheTrailStopLossFlag = new CacheConfiguration<Long, Boolean>("CacheTrailStopLossFlag");
         this.cacheTrailStopLossFlag = igniteConfig.getInstance().getOrCreateCache(ccfgcacheTrailStopLossFlag);
         
-        CacheConfiguration<Long, Instrument> ccfgcacheInstrument = new CacheConfiguration<Long, Instrument>("CacheInstrument");
-		this.cacheInstrument = igniteConfig.getInstance().getOrCreateCache(ccfgcacheInstrument);
+		CacheConfiguration<Long, String> ccfgcacheInstrument = new CacheConfiguration<Long, String>(
+				"CacheInstrumentTradingSymbol");
+		this.cacheInstrumentTradingSymbol = igniteConfig.getInstance().getOrCreateCache(ccfgcacheInstrument);
 		
 		CacheConfiguration<Long, Boolean> ccfgcStartTrade = new CacheConfiguration<Long, Boolean>("CacheStartTrade");
 		 this.startTrade = igniteConfig.getInstance().getOrCreateCache(ccfgcStartTrade);
@@ -66,8 +66,12 @@ public class Cache {
 		 CacheConfiguration<String, KiteConnect> ccfgcKiteSession = new CacheConfiguration<String, KiteConnect>("CacheUserSession");
 		 this.cacheUserSession = igniteConfig.getInstance().getOrCreateCache(ccfgcKiteSession);
 		 
-		 CacheConfiguration<String, Integer> ccfgcQuantity = new CacheConfiguration<String, Integer>("CacheQuantity");
+		 CacheConfiguration<Long, Integer> ccfgcQuantity = new CacheConfiguration<Long, Integer>("CacheQuantity");
 		 this.cacheQuantity = igniteConfig.getInstance().getOrCreateCache(ccfgcQuantity);
+		 
+		 CacheConfiguration<Long, String> ccfgCacheOrderPublisher = new CacheConfiguration<Long, String>(
+					"CacheCacheOrderPublisher");
+			this.cacheOrderPublisher = igniteConfig.getInstance().getOrCreateCache(ccfgCacheOrderPublisher);
     }
 
     public IgniteCache<Long, String> getBoughtInstruments() {
@@ -78,10 +82,6 @@ public class Cache {
         return timeSeries;
     }
 
-    public IgniteCache<Long, Tick> getCacheLatestTick() {
-        return cacheLatestTick;
-    }
-
 	public IgniteCache<Long, Double> getCacheTotalProfit() {
 		return cacheTotalProfit;
 	}
@@ -90,13 +90,7 @@ public class Cache {
 		return cacheTrailStopLossFlag;
 	}
 
-	public IgniteCache<Long, Instrument> getCacheInstrument() {
-		return cacheInstrument;
-	}
-
-	public void setCacheInstrument(IgniteCache<Long, Instrument> cacheInstrument) {
-		this.cacheInstrument = cacheInstrument;
-	}
+	
 
 	public IgniteCache<String, KiteConnect> getCacheUserSession() {
 		return cacheUserSession;
@@ -106,12 +100,28 @@ public class Cache {
 		this.cacheUserSession = cacheUserSession;
 	}
 
-	public IgniteCache<String, Integer> getCacheQuantity() {
+	public IgniteCache<Long, Integer> getCacheQuantity() {
 		return cacheQuantity;
 	}
 
-	public void setCacheQuantity(IgniteCache<String, Integer> cacheQuantity) {
+	public void setCacheQuantity(IgniteCache<Long, Integer> cacheQuantity) {
 		this.cacheQuantity = cacheQuantity;
+	}
+
+	public IgniteCache<Long, String> getCacheInstrumentTradingSymbol() {
+		return cacheInstrumentTradingSymbol;
+	}
+
+	public void setCacheInstrumentTradingSymbol(IgniteCache<Long, String> cacheInstrumentTradingSymbol) {
+		this.cacheInstrumentTradingSymbol = cacheInstrumentTradingSymbol;
+	}
+
+	public IgniteCache<Long, Double> getCacheLastTradedPrice() {
+		return cacheLastTradedPrice;
+	}
+
+	public IgniteCache<Long, String> getCacheOrderPublisher() {
+		return cacheOrderPublisher;
 	}
 
 }

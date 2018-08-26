@@ -55,14 +55,15 @@ public class OrderPublisher {
 
 	public void publish(double closePrice, long instrument, int orderQuantity, String orderType,
 			InstrumentSelectorDTO instrumentSelectorDTO) {
+		logger.info("**************** Order Type: "+orderType);
 		OrderRequestDTO orderBo = new OrderRequestDTO();
 		orderBo.setPrice(closePrice);
 		orderBo.setInstrumentSelectorDTO(instrumentSelectorDTO);
 		orderBo.setInstrumentToken(instrument);
 		orderBo.setTransactionType(orderType);
-		orderBo.setTradingsymbol(cache.getCacheInstrument().get(instrument).getTradingsymbol());
+		orderBo.setTradingsymbol(cache.getCacheInstrumentTradingSymbol().get(instrument));
 		orderBo.setQuantity(80);
-		orderBo.setTag("STR");
+		orderBo.setTag("Chutiya");
 		orderBo.setUserId(userid);
 		String newJson = new Gson().toJson(orderBo);
 		ListenableFuture<SendResult<String, String>> future = this.kafkaTemplate.send(orderProcessProducerTopic,

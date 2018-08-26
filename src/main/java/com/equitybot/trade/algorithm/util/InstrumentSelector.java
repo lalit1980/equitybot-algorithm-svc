@@ -37,8 +37,8 @@ public class InstrumentSelector {
         InstrumentSelectorDTO instrumentSelectorDTO = new InstrumentSelectorDTO();
         boolean profitableB = profitable(instrument,instrumentSelectorDTO);
         boolean underPriceRangeB = underPriceRange(instrument, instrumentSelectorDTO);
-        boolean feasibleSellerAvailabilitB = feasibleSellerAvailability(instrument, expectedPrice, instrumentSelectorDTO);
-        instrumentSelectorDTO.setEligibleInstrument(profitableB && underPriceRangeB && feasibleSellerAvailabilitB);
+      //  boolean feasibleSellerAvailabilitB = feasibleSellerAvailability(instrument, expectedPrice, instrumentSelectorDTO);
+        //instrumentSelectorDTO.setEligibleInstrument(profitableB && underPriceRangeB && feasibleSellerAvailabilitB);
         return instrumentSelectorDTO;
     }
 
@@ -55,9 +55,9 @@ public class InstrumentSelector {
     }
 
     private boolean underPriceRange(Long instrument,InstrumentSelectorDTO instrumentSelectorDTO) {
-        Tick instrumentTick = this.cache.getCacheLatestTick().get(instrument);
+        Double instrumentTick = this.cache.getCacheLastTradedPrice().get(instrument);
         if (instrumentTick != null) {
-            double instrumentPrice = instrumentTick.getClosePrice();
+            double instrumentPrice = instrumentTick;
             instrumentSelectorDTO.setInstrumentClosePrice(instrumentPrice);
             logger.debug(" instrument ID {} : Close Price is {} : maxPriceLimit is {}", instrument, instrumentPrice, this.maxInstrumentPricePerStockLimit);
             return instrumentPrice <= maxInstrumentPricePerStockLimit;
@@ -66,7 +66,7 @@ public class InstrumentSelector {
         }
         return false;
     }
-
+/*
     private boolean feasibleSellerAvailability(Long instrument, double expectedPrice,InstrumentSelectorDTO instrumentSelectorDTO) {
         Tick instrumentTick = this.cache.getCacheLatestTick().get(instrument);
 
@@ -113,5 +113,5 @@ public class InstrumentSelector {
         return false;
     }
 
-
+*/
 }

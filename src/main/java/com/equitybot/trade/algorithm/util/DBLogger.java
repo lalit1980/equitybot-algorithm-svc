@@ -32,7 +32,7 @@ public class DBLogger {
         logger.info(superTrendAnalyzer.toString());
         LogData data = new LogData();
         data.setInstrumentToken(superTrendAnalyzer.getSuperTradeIndicator().getInstrument());
-        data.setTradingSymbol(cache.getCacheInstrument().get(superTrendAnalyzer.getSuperTradeIndicator().getInstrument()).getTradingsymbol());
+        data.setTradingSymbol(cache.getCacheInstrumentTradingSymbol().get(superTrendAnalyzer.getSuperTradeIndicator().getInstrument()));
         data.setOpen(superTrendAnalyzer.getSuperTradeIndicator().getBar().getOpenPrice().doubleValue());
         data.setHigh(superTrendAnalyzer.getSuperTradeIndicator().getBar().getMaxPrice().doubleValue());
         data.setLow(superTrendAnalyzer.getSuperTradeIndicator().getBar().getMinPrice().doubleValue());
@@ -54,7 +54,7 @@ public class DBLogger {
     public void logSuperTrendAllProfitLossData(SuperTrendAnalyzer superTrendAnalyzer, String type) {
         ActionLogData data = new ActionLogData();
         data.setInstrumentToken(superTrendAnalyzer.getSuperTradeIndicator().getInstrument());
-        data.setTradingSymbol(cache.getCacheInstrument().get(superTrendAnalyzer.getSuperTradeIndicator().getInstrument()).getTradingsymbol());
+        data.setTradingSymbol(cache.getCacheInstrumentTradingSymbol().get(superTrendAnalyzer.getSuperTradeIndicator().getInstrument()));
         data.setClose(superTrendAnalyzer.getSuperTradeIndicator().getBar().getClosePrice().doubleValue());
         data.setSignal(superTrendAnalyzer.getSuperTradeIndicator().getBuySell());
         data.setId(UUID.randomUUID().toString());
@@ -70,7 +70,7 @@ public class DBLogger {
         ProfitLossData profitLossData = new ProfitLossData();
         profitLossData.setId(UUID.randomUUID().toString());
         profitLossData.setInstrumentToken(superTrendAnalyzer.getSuperTradeIndicator().getInstrument());
-        profitLossData.setTradingSymbol(cache.getCacheInstrument().get(superTrendAnalyzer.getSuperTradeIndicator().getInstrument()).getTradingsymbol());
+        profitLossData.setTradingSymbol(cache.getCacheInstrumentTradingSymbol().get(superTrendAnalyzer.getSuperTradeIndicator().getInstrument()));
         profitLossData.setTotalProfitLoss(superTrendAnalyzer.getTotalProfitLoss().doubleValue());
         cache.getCacheTotalProfit().put(superTrendAnalyzer.getSuperTradeIndicator().getInstrument(), superTrendAnalyzer.getTotalProfitLoss().doubleValue());
         logger.info("Instrument Token: {} :Total Profit: {} :", superTrendAnalyzer.getSuperTradeIndicator().getInstrument(), profitLossData.toString());
